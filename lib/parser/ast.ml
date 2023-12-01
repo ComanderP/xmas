@@ -5,7 +5,7 @@ type baseType =
   | Char of char
   | Float of float
   | List of baseType list
-  | Function
+  | Function of string
   | Unit
 
 type 'a unaryOp = Neg of 'a | Not of 'a
@@ -25,7 +25,10 @@ type 'a binOp =
   | And of 'a * 'a
   | Or of 'a * 'a
 
+type scope = (string * baseType) list
+
 type expression =
+  | Scope of scope
   | BinExpr of expression binOp
   | UnaryExpr of expression unaryOp
   | Call of string * expression list
