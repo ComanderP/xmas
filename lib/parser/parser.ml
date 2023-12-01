@@ -5,7 +5,9 @@ let integer =
 
 let identifier =
   ( ^ )
-  <$> take_while1 (function 'a' .. 'z' | 'A' .. 'Z' -> true | _ -> false)
+  <$> take_while1 (function
+        | 'a' .. 'z' | 'A' .. 'Z' | '_' -> true
+        | _ -> false)
   <*> take_while (function
         | 'a' .. 'z' | 'A' .. 'Z' | '0' .. '9' | '_' -> true
         | _ -> false)
@@ -28,13 +30,15 @@ let chainl1 e op =
   let rec go acc = lift2 (fun f x -> f acc x) op e >>= go <|> return acc in
   e >>= fun init -> go init
 
+let variableParser =
+  identifier >>= fun name ->
+  if reserved name then fail "reserved word"
+  else if reserved_op name then fail "reserved operator"
+  else return name
+
 (* let expr : int t =
      fix (fun expr ->
          let factor = parens expr <|> integer in
          let term = chainl1 factor (mul <|> div) in
          chainl1 term (add <|> sub))
-
-   let eval (str : string) : int =
-     match parse_string ~consume:All expr str with
-     | Ok v -> v
-     | Error msg -> failwith msg *)
+*)

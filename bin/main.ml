@@ -1,7 +1,12 @@
 open Xmas
+open Angstrom
+
+let runParser (str : string) parser =
+  match parse_string ~consume:All parser str with
+  | Ok v -> v
+  | Error msg -> failwith msg
 
 let () =
-  let args = Sys.argv in
-  let input = args.(1) in
-  let res = Parser.eval input in
-  print_endline (string_of_int res)
+  let input = "if" in
+  let res = runParser input Parser.variableParser in
+  print_endline res
