@@ -1,0 +1,9 @@
+(library
+ (name xmas)
+ (libraries ppx_show.runtime angstrom)
+ (preprocess
+  (pps ppx_show))
+ (flags
+  (:standard -warn-error -A)))
+
+(include_subdirs unqualified)

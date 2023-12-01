@@ -1,0 +1,8 @@
+(executable
+ (public_name xmas)
+ (name main)
+ (libraries xmas ppx_show.runtime angstrom)
+ (preprocess
+  (pps ppx_show))
+ (flags
+  (:standard -warn-error -A)))
