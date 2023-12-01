@@ -29,6 +29,7 @@ type scope = (string * baseType) list
 
 type expression =
   | Scope of scope
+  | Bind of string * expression
   | BinExpr of expression binOp
   | UnaryExpr of expression unaryOp
   | Call of string * expression list
