@@ -5,7 +5,7 @@ type baseType =
   | Char of char
   | Float of float
   | List of baseType list
-  | FunctionType
+  | Function
   | Unit
 
 type 'a unaryOp = Neg of 'a | Not of 'a
@@ -33,7 +33,7 @@ type expression =
   | Literal of baseType
 
 type statement =
-  | Function of string * string list * statement list
+  | FunDef of string * string list * statement list
   | Assign of string * expression
   | Expr of expression
   | If of expression * statement list
