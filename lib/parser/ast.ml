@@ -1,13 +1,3 @@
-type baseType =
-  | Int of int
-  | Bool of bool
-  | String of string
-  | Char of char
-  | Float of float
-  | List of baseType list
-  | Function of string
-  | Unit
-
 type 'a unaryOp = Neg of 'a | Not of 'a
 
 type 'a binOp =
@@ -24,10 +14,20 @@ type 'a binOp =
   | Ge of 'a * 'a
   | And of 'a * 'a
   | Or of 'a * 'a
+[@@deriving variants]
 
-type scope = (string * baseType) list
+type baseType =
+  | Int of int
+  | Bool of bool
+  | String of string
+  | Char of char
+  | List of expression list
+  | Function of string
+  | Unit
 
-type expression =
+and scope = (string * baseType) list
+
+and expression =
   | Scope of scope
   | Bind of string * expression
   | BinExpr of expression binOp

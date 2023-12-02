@@ -1,7 +1,7 @@
 (executable
  (public_name xmas)
  (name main)
- (libraries xmas ppx_show.runtime angstrom)
+ (libraries xmas ppx_show.runtime angstrom core)
  (preprocess
   (pps ppx_show))
  (flags

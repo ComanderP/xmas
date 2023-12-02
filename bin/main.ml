@@ -7,6 +7,6 @@ let runParser (str : string) parser =
   | Error msg -> failwith msg
 
 let () =
-  let input = "if" in
-  let res = runParser input Parser.variableParser in
-  print_endline res
+  let input = "[1 2 3]" in
+  let res = runParser input Parser.list in
+  List.iter print_int res

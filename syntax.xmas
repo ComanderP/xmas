@@ -1,0 +1,55 @@
+for parse in (int, float) {
+    (..x, str).parse() ~> (..x ++ ..str.parse())
+}
+a, b, str = input().int().float()
+
+#before (a + b) {print(a)}
+
+circle: \r -> {
+    r@radius
+}
+
+f: \x y -> x + y
+
+"this is a string"
+
+a = (1..n)
+
+(1, "asdasd" , (1, 2), 0.2)
+
+
+
+f: \x y -> {
+    x+y@sum
+}
+
+point: \x y -> {
+    x@x
+    y@y
+    (x^2 + y^2).sqrt()@norm
+}
+
+
+// list
+[1, 2, 3]
+
+// function definition
+name: \x y -> x + y
+
+a = {
+    b = {
+        c = 1
+    }
+}
+
+a, b, str = input().int().float()
+
+c \ x -> x + 1
+
+fib \ 0 -> 1
+fib \ 1 -> 1
+fib \ n -> fib(n-1) + fib(n-2)
+
+
+// function definition
+identifier \ expression expression -> expression
