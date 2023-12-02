@@ -44,7 +44,6 @@ let variable : string t =
 let arrow = function "->" -> true | _ -> false
 
 (* TODO: make list accept expressions *)
-let list = brackets (sep_by (char ' ') integer)
 
 (* TODO: make it accept expression instead*)
 let unaryOp =
@@ -55,7 +54,8 @@ let unaryOp =
 let stringParser : string t =
   quotes (take_while (function '"' -> false | _ -> true))
 
-let expr op opstring = string opstring >>| fun x y z -> BinExpr (op x y z)
+let expr op opstring = string opstring *> return (fun x y -> BinExpr (op x y))
+let expr1 op opstring = string opstring *> return (fun x -> UnaryExpr (op x))
 
 let rec expression i : expression t =
   match i with
@@ -76,3 +76,74 @@ let baseType : baseType t =
          let term = chainl1 factor (mul <|> div) in
          chainl1 term (add <|> sub))
 *)
+
+let statement_parse =
+  fix (fun statement_parse ->
+      let scope_parse = braces (many statement_parse) in
+      let rec functioncall_parse =
+        (fun x y -> Call (x, y))
+        <$> variable
+        <*> sep_by (char ',') (expr_parse 0)
+      in
+      let rec expr_parse = function
+        | 0 -> chainl1 (expr_parse 1) (expr or_ "or")
+        | 1 -> chainl1 (expr_parse 2) (expr and_ "and")
+        | 2 -> chainl1 (expr_parse 3) (expr eq "==" <|> expr neq "!=")
+        | 3 ->
+            chainl1 (expr_parse 4)
+              (expr lt "<" <|> expr gt ">" <|> expr le ">=" <|> expr ge ">=")
+        | 4 -> chainl1 (expr_parse 5) (expr add "+" <|> expr sub "-")
+        | 5 -> chainl1 (expr_parse 6) (expr mul "*" <|> expr div "/")
+        | 6 ->
+            expr1 neg "-" <*> expr_parse 7
+            <|> (expr1 not "not" <*> expr_parse 7)
+            <|> expr_parse 7
+        | 7 ->
+            functioncall_parse
+            <|> ((fun x -> Var x) <$> variable)
+            <|> ((fun x -> Literal x) <$> Lazy.force literal_parse)
+            <|> parens (expr_parse 0)
+            <|> ((fun x -> Scope x) <$> braces scope_parse)
+        | _ -> failwith "unprecedented precendece level"
+      in
+      choice [ (fun x -> Expr x) <$> expr_parse 0 ])
+(*
+and scope_parse = lazy (braces (many (Lazy.force statement_parse)))
+
+and expr_parse : int -> expression t = function
+  | 0 -> chainl1 (expr_parse 1) (expr or_ "or")
+  | 1 -> chainl1 (expr_parse 2) (expr and_ "and")
+  | 2 -> chainl1 (expr_parse 3) (expr eq "==" <|> expr neq "!=")
+  | 3 ->
+      chainl1 (expr_parse 4)
+        (expr lt "<" <|> expr gt ">" <|> expr le ">=" <|> expr ge ">=")
+  | 4 -> chainl1 (expr_parse 5) (expr add "+" <|> expr sub "-")
+  | 5 -> chainl1 (expr_parse 6) (expr mul "*" <|> expr div "/")
+  | 6 ->
+      expr1 neg "-" <*> expr_parse 7
+      <|> (expr1 not "not" <*> expr_parse 7)
+      <|> expr_parse 7
+  | 7 ->
+      Lazy.force functioncall_parse
+      <|> ((fun x -> Var x) <$> variable)
+      <|> ((fun x -> Literal x) <$> Lazy.force literal_parse)
+      <|> parens (expr_parse 0)
+  | _ -> failwith "unprecedented precendece level"
+
+and functioncall_parse =
+  lazy
+    ((fun x y -> Call (x, y)) <$> variable <*> sep_by (char ',') (expr_parse 0))
+
+and literal_parse =
+  lazy
+    ((fun x -> Int x)
+    <$> integer
+    <|> ((fun x -> Bool x)
+        <$> (string "true" *> return true <|> string "false" *> return false))
+    <|> ((fun x -> String x) <$> stringParser)
+    <|> ((fun x -> Char x) <$> (char '\'' *> any_char <* char '\''))
+    <|> ((fun x -> List x) <$> Lazy.force list)
+    <|> char '(' *> char ')' *> return Unit)
+
+and list = lazy (brackets (sep_by (char ' ') (expr_parse 0)))
+    *)

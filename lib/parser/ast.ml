@@ -1,4 +1,4 @@
-type 'a unaryOp = Neg of 'a | Not of 'a
+type 'a unaryOp = Neg of 'a | Not of 'a [@@deriving variants, show]
 
 type 'a binOp =
   | Add of 'a * 'a
@@ -14,7 +14,7 @@ type 'a binOp =
   | Ge of 'a * 'a
   | And of 'a * 'a
   | Or of 'a * 'a
-[@@deriving variants]
+[@@deriving variants, show]
 
 type baseType =
   | Int of int
@@ -22,10 +22,9 @@ type baseType =
   | String of string
   | Char of char
   | List of expression list
-  | Function of string
   | Unit
 
-and scope = (string * baseType) list
+and scope = statement list
 
 and expression =
   | Scope of scope
@@ -36,7 +35,7 @@ and expression =
   | Var of string
   | Literal of baseType
 
-type statement =
+and statement =
   | FunDef of string * string list * statement list
   | Assign of string * expression
   | Expr of expression
@@ -44,5 +43,6 @@ type statement =
   | Match of expression * (expression * statement list) list
   | While of expression * statement list
   | For of string * expression * statement list
+[@@deriving show]
 
 type ast = Program of statement list

@@ -7,6 +7,7 @@ let runParser (str : string) parser =
   | Error msg -> failwith msg
 
 let () =
-  let input = "[1 2 3]" in
-  let res = runParser input Parser.list in
-  List.iter print_int res
+  let input = "a= 1 + 2" in
+  let res = runParser input (Lazy.force Parser.statement_parse) in
+  print_endline (Ast.show_statement res)
+(* List.iter print_int res*)
