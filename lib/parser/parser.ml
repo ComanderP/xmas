@@ -52,13 +52,6 @@ let baseType : baseType t =
   <|> (quotes any_char >>| fun x -> Char x)
 (* <|> (list >>| fun x -> List (List.map (fun x -> Literal x) x)) *)
 
-(* let expr : int t =
-     fix (fun expr ->
-         let factor = parens expr <|> integer in
-         let term = chainl1 factor (mul <|> div) in
-         chainl1 term (add <|> sub))
-*)
-
 let list p = brackets (sep_by (char ' ') (p 0))
 
 let statement expression =
@@ -130,8 +123,9 @@ let expression =
         <$> expression
         <*> char '@' *> variable
       in
+      (* TODO: merge prec0 and prec x so it looks normal*)
+      let prec0 = fix (function prec0 -> 
       let rec prec = function
-        | 0 -> chainl1 (prec 1) (expr or_ "or")
         | 1 -> chainl1 (prec 2) (expr and_ "and")
         | 2 -> chainl1 (prec 3) (expr eq "==" <|> expr neq "!=")
         | 3 ->
@@ -140,22 +134,22 @@ let expression =
         | 4 -> chainl1 (prec 5) (expr add "+" <|> expr sub "-")
         | 5 -> chainl1 (prec 6) (expr mul "*" <|> expr div "/")
         | 6 ->
-            expr1 (fun x -> Neg x) "-"
-            <*> prec 7
+            (expr1 (fun x -> Neg x) "-"
+            <*> prec 7)
             <|> (expr1 (fun x -> Not x) "not" <*> prec 7)
             <|> prec 7
         | 7 ->
-            (* Function call *)
+            (* Function call *)(
             (fun x y -> Call (x, y))
             <$> variable
-            <*> sep_by (char ',') (prec 0)
+            <*> sep_by (char ',') (prec0))
             <|> ((fun x -> Var x) <$> variable)
             <|> ((fun x -> Literal x) <$> baseType)
-            <|> parens (prec 0)
+            <|> parens (prec0)
             <|> scope <|> bind
-        | _ -> failwith "unprecedented precendece level"
+        | _ -> failwith "unprecedented precendece level" in chainl1 (prec 1) (expr or_ "or")) 
       in
-      assert false)
+      prec0)
 
 (* choice [ (fun x -> Expr x) <$> expr_parse 0 ]) *)
 (*

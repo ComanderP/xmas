@@ -5,4 +5,7 @@
  (preprocess
   (pps ppx_show))
  (flags
-  (:standard -warn-error -A)))
+  (:standard -warn-error -A))
+ (modes 
+   byte exe)
+ )

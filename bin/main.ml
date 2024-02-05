@@ -199,8 +199,8 @@ let json =
   <?> "json"
 
 let () =
-  let input = "{\"cool\": 12, \"xasa\": \"ascacs\"}" in
-  let res = runParser input json in
-  print_endline (show_json res)
+  let input = "1 + 2" in
+  let res = runParser input Parser.expression in
+  print_endline (Ast.show_expression res)
 (* print_endline (Ast.show_statement res) *)
 (* List.iter print_int res *)
