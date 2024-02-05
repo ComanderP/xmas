@@ -1,24 +1,6 @@
 open Angstrom
 open Ast
-
-let integer : int t =
-  take_while1 (function '0' .. '9' -> true | _ -> false) >>| int_of_string
-
-let boolean : bool t = string "true" <|> string "false" >>| bool_of_string
-
-let identifier : string t =
-  ( ^ )
-  <$> take_while1 (function
-        | 'a' .. 'z' | 'A' .. 'Z' | '_' -> true
-        | _ -> false)
-  <*> take_while (function
-        | 'a' .. 'z' | 'A' .. 'Z' | '0' .. '9' | '_' -> true
-        | _ -> false)
-
-let parens p = char '(' *> p <* char ')'
-let braces p = char '{' *> p <* char '}'
-let brackets p = char '[' *> p <* char ']'
-let quotes p = char '"' *> p <* char '"' <|> (char '\'' *> p <* char '\'')
+open Basic
 
 let reserved = function
   | "if" | "while" | "for" | "true" | "false" | "in" | "or" | "and" | "not"
@@ -77,36 +59,105 @@ let baseType : baseType t =
          chainl1 term (add <|> sub))
 *)
 
-let statement_parse =
-  fix (fun statement_parse ->
-      let scope_parse = braces (many statement_parse) in
-      let rec functioncall_parse =
-        (fun x y -> Call (x, y))
+let list p = brackets (sep_by (char ' ') (p 0))
+
+let statement expression =
+  fix (fun statement ->
+      let fun_def =
+        (fun f_name args scope -> FunDef (f_name, args, scope))
         <$> variable
-        <*> sep_by (char ',') (expr_parse 0)
+        <*> char ':' *> char '\'' *> sep_by (char ' ') variable
+        <*> sep_by (char '\n') statement
       in
-      let rec expr_parse = function
-        | 0 -> chainl1 (expr_parse 1) (expr or_ "or")
-        | 1 -> chainl1 (expr_parse 2) (expr and_ "and")
-        | 2 -> chainl1 (expr_parse 3) (expr eq "==" <|> expr neq "!=")
+      let assign =
+        (fun var expr -> Assign (var, expr))
+        <$> variable
+        <*> char '=' *> expression
+      in
+      let if_ =
+        (fun cond scope -> If (cond, scope))
+        <$> string "if" *> expression
+        <*> braces (many statement)
+      in
+      let while_ =
+        (fun cond scope -> While (cond, scope))
+        <$> string "while" *> expression
+        <*> braces (many statement)
+      in
+      let for_ =
+        (fun var expr scope -> For (var, expr, scope))
+        <$> string "for" *> variable
+        <*> string "in" *> expression
+        <*> braces (many statement)
+      in
+      let case_ =
+        (fun pattern scope -> (pattern, scope))
+        <$> expression
+        <*> braces (many statement)
+      in
+      let match_ =
+        (fun expr cases -> Match (expr, cases))
+        <$> string "match" *> expression
+        <*> braces (many case_)
+      in
+      fun_def <|> assign <|> if_ <|> while_ <|> for_ <|> match_ <?> "statement")
+
+(* let a b = fix (fun a -> (* definition of `a` in terms of `a` and `b` *))
+
+   let b =
+     fix (fun b ->
+         let a = a b in
+         (* definition of b in terms of `a` and `b` *))
+
+   let a = a b *)
+
+let bin_op = function
+  | '+' -> add
+  | '-' -> sub
+  | '*' -> mul
+  | '/' -> div
+  | '%' -> mod_
+  | _ -> failwith "Invalid operator"
+
+let expression =
+  fix (fun expression ->
+      let statement = statement expression in
+      let scope =
+        (fun statements -> Scope statements) <$> braces (many statement)
+      in
+      let bind =
+        (fun expr var -> Bind (var, expr))
+        <$> expression
+        <*> char '@' *> variable
+      in
+      let rec prec = function
+        | 0 -> chainl1 (prec 1) (expr or_ "or")
+        | 1 -> chainl1 (prec 2) (expr and_ "and")
+        | 2 -> chainl1 (prec 3) (expr eq "==" <|> expr neq "!=")
         | 3 ->
-            chainl1 (expr_parse 4)
+            chainl1 (prec 4)
               (expr lt "<" <|> expr gt ">" <|> expr le ">=" <|> expr ge ">=")
-        | 4 -> chainl1 (expr_parse 5) (expr add "+" <|> expr sub "-")
-        | 5 -> chainl1 (expr_parse 6) (expr mul "*" <|> expr div "/")
+        | 4 -> chainl1 (prec 5) (expr add "+" <|> expr sub "-")
+        | 5 -> chainl1 (prec 6) (expr mul "*" <|> expr div "/")
         | 6 ->
-            expr1 neg "-" <*> expr_parse 7
-            <|> (expr1 not "not" <*> expr_parse 7)
-            <|> expr_parse 7
+            expr1 (fun x -> Neg x) "-"
+            <*> prec 7
+            <|> (expr1 (fun x -> Not x) "not" <*> prec 7)
+            <|> prec 7
         | 7 ->
-            functioncall_parse
+            (* Function call *)
+            (fun x y -> Call (x, y))
+            <$> variable
+            <*> sep_by (char ',') (prec 0)
             <|> ((fun x -> Var x) <$> variable)
-            <|> ((fun x -> Literal x) <$> Lazy.force literal_parse)
-            <|> parens (expr_parse 0)
-            <|> ((fun x -> Scope x) <$> braces scope_parse)
+            <|> ((fun x -> Literal x) <$> baseType)
+            <|> parens (prec 0)
+            <|> scope <|> bind
         | _ -> failwith "unprecedented precendece level"
       in
-      choice [ (fun x -> Expr x) <$> expr_parse 0 ])
+      assert false)
+
+(* choice [ (fun x -> Expr x) <$> expr_parse 0 ]) *)
 (*
 and scope_parse = lazy (braces (many (Lazy.force statement_parse)))
 

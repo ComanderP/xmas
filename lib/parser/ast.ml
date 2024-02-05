@@ -24,6 +24,15 @@ type baseType =
   | List of expression list
   | Unit
 
+and statement =
+  | FunDef of string * string list * scope
+  | Assign of string * expression
+  | Expr of expression
+  | If of expression * scope
+  | While of expression * scope
+  | For of string * expression * scope
+  | Match of expression * (expression * statement list) list
+
 and scope = statement list
 
 and expression =
@@ -34,15 +43,6 @@ and expression =
   | Call of string * expression list
   | Var of string
   | Literal of baseType
-
-and statement =
-  | FunDef of string * string list * statement list
-  | Assign of string * expression
-  | Expr of expression
-  | If of expression * statement list
-  | Match of expression * (expression * statement list) list
-  | While of expression * statement list
-  | For of string * expression * statement list
 [@@deriving show]
 
 type ast = Program of statement list
