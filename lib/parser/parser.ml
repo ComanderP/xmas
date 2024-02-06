@@ -124,29 +124,29 @@ let expression =
         <*> char '@' *> variable
       in
       (* TODO: merge prec0 and prec x so it looks normal*)
-      let prec0 = fix (function prec0 -> 
+      let prec0 = fix (fun prec0 -> 
       let rec prec = function
-        | 1 -> chainl1 (prec 2) (expr and_ "and")
-        | 2 -> chainl1 (prec 3) (expr eq "==" <|> expr neq "!=")
+        | 1 -> ws *> chainl1 (prec 2) (expr and_ "and") <* ws 
+        | 2 -> ws *> (chainl1 (prec 3) (expr eq "==" <|> expr neq "!=")) <* ws
         | 3 ->
-            chainl1 (prec 4)
-              (expr lt "<" <|> expr gt ">" <|> expr le ">=" <|> expr ge ">=")
-        | 4 -> chainl1 (prec 5) (expr add "+" <|> expr sub "-")
-        | 5 -> chainl1 (prec 6) (expr mul "*" <|> expr div "/")
+            ws *> (chainl1 (prec 4)
+              (expr lt "<" <|> expr gt ">" <|> expr le ">=" <|> expr ge ">=")) <* ws
+        | 4 -> ws *> (chainl1 (prec 5) (expr add "+" <|> expr sub "-")) <* ws 
+        | 5 -> ws *> (chainl1 (prec 6) (expr mul "*" <|> expr div "/")) <* ws 
         | 6 ->
-            (expr1 (fun x -> Neg x) "-"
+            ws *> ((expr1 (fun x -> Neg x) "-"
             <*> prec 7)
             <|> (expr1 (fun x -> Not x) "not" <*> prec 7)
-            <|> prec 7
+            <|> prec 7) <* ws
         | 7 ->
             (* Function call *)(
-            (fun x y -> Call (x, y))
+            ws *> ((fun x y -> Call (x, y))
             <$> variable
             <*> sep_by (char ',') (prec0))
-            <|> ((fun x -> Var x) <$> variable)
-            <|> ((fun x -> Literal x) <$> baseType)
+            <|> ((fun x -> Var x) <$> (ws *> variable))
+            <|> ((fun x -> Literal x) <$> (ws *> baseType))
             <|> parens (prec0)
-            <|> scope <|> bind
+            <|> scope <|> bind) <* ws 
         | _ -> failwith "unprecedented precendece level" in chainl1 (prec 1) (expr or_ "or")) 
       in
       prec0)

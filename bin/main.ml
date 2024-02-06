@@ -199,7 +199,8 @@ let json =
   <?> "json"
 
 let () =
-  let input = "1 + 2" in
+  let _ = Printexc.record_backtrace true in 
+  let input = "1 + 2 == 1 " in
   let res = runParser input Parser.expression in
   print_endline (Ast.show_expression res)
 (* print_endline (Ast.show_statement res) *)
