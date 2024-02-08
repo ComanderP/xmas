@@ -4,6 +4,7 @@ open Ast
 %}
 (* Tokens *)
 %token <int> INT
+%token <float> FLOAT
 %token <string> ID
 %token <string> STRING
 %token TRUE
@@ -32,6 +33,7 @@ open Ast
 %token COLON ":" 
 %token ARROW "->"
 %token AT "@"
+%token NEWLINE
 %token EOF
 (* Associativity and precedence *)
 %nonassoc IN
@@ -93,8 +95,8 @@ let expression :=
   | expr = expression; AT ; name = ID; { Bind(name, expr) } 
   | binOp = binOp; { BinExpr binOp }
   | uniOp = uniOp; { UnaryExpr uniOp }
-  | name = ID; params = separated_list(COMMA, expression); { Call(name, params) }
   | name = ID; { Var (name) }
+  | name = ID; LPAREN; params = separated_list(COMMA, expression); RPAREN; { Call(name, params) }
   | value = baseType; { Literal (value) }
 
 let binOp := 
