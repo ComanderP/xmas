@@ -1,0 +1,183 @@
+
+** Conflict (shift/reduce) in state 64.
+** Token involved: AT
+** This state is reached from program after reading:
+
+MINUS expression
+
+** The derivations that appear below have the following common factor:
+** (The question mark symbol (?) represents the spot where the derivations begin to differ.)
+
+program 
+list(statement) EOF 
+statement list(statement) 
+expression 
+(?)
+
+** In state 64, looking ahead at AT, shifting is permitted
+** because of the following sub-derivation:
+
+uniOp 
+MINUS expression 
+      expression . AT ID 
+
+** In state 64, looking ahead at AT, reducing production
+** uniOp -> MINUS expression
+** is permitted because of the following sub-derivation:
+
+expression AT ID // lookahead token appears
+uniOp // lookahead token is inherited
+MINUS expression . 
+
+** Conflict (shift/reduce) in state 54.
+** Token involved: MINUS
+** This state is reached from program after reading:
+
+expression
+
+** The derivations that appear below have the following common factor:
+** (The question mark symbol (?) represents the spot where the derivations begin to differ.)
+
+program 
+list(statement) EOF 
+(?)
+
+** In state 54, looking ahead at MINUS, shifting is permitted
+** because of the following sub-derivation:
+
+statement list(statement) 
+expression 
+binOp 
+expression . MINUS expression 
+
+** In state 54, looking ahead at MINUS, reducing production
+** statement -> expression
+** is permitted because of the following sub-derivation:
+
+statement list(statement) // lookahead token appears because list(statement) can begin with MINUS
+expression . 
+
+** Conflict (shift/reduce) in state 34.
+** Token involved: MINUS
+** This state is reached from program after reading:
+
+ID EQUALS expression
+
+** The derivations that appear below have the following common factor:
+** (The question mark symbol (?) represents the spot where the derivations begin to differ.)
+
+program 
+list(statement) EOF 
+(?)
+
+** In state 34, looking ahead at MINUS, shifting is permitted
+** because of the following sub-derivation:
+
+statement list(statement) 
+variable_assignment 
+ID EQUALS expression 
+          binOp 
+          expression . MINUS expression 
+
+** In state 34, looking ahead at MINUS, reducing production
+** variable_assignment -> ID EQUALS expression
+** is permitted because of the following sub-derivation:
+
+statement list(statement) // lookahead token appears because list(statement) can begin with MINUS
+variable_assignment // lookahead token is inherited
+ID EQUALS expression . 
+
+** Conflict (shift/reduce) in state 32.
+** Token involved: BACKSLASH
+** This state is reached from program after reading:
+
+MATCH expression LBRACE BACKSLASH expression ARROW ID
+
+** The derivations that appear below have the following common factor:
+** (The question mark symbol (?) represents the spot where the derivations begin to differ.)
+
+program 
+list(statement) EOF 
+statement list(statement) 
+match_statement 
+MATCH expression LBRACE nonempty_list(match_branch) RBRACE 
+                        (?)
+
+** In state 32, looking ahead at BACKSLASH, reducing production
+** expression -> ID
+** is permitted because of the following sub-derivation:
+
+match_branch nonempty_list(match_branch) // lookahead token appears because nonempty_list(match_branch) can begin with BACKSLASH
+BACKSLASH expression ARROW nonempty_list(statement) // lookahead token is inherited
+                           statement // lookahead token is inherited
+                           expression // lookahead token is inherited
+                           ID . 
+
+** In state 32, looking ahead at BACKSLASH, shifting is permitted
+** because of the following sub-derivation:
+
+match_branch 
+BACKSLASH expression ARROW nonempty_list(statement) 
+                           statement 
+                           function_definition 
+                           ID . BACKSLASH list(ID) ARROW scope 
+
+** Conflict (shift/reduce) in state 17.
+** Token involved: AT
+** This state is reached from program after reading:
+
+expression MINUS expression
+
+** The derivations that appear below have the following common factor:
+** (The question mark symbol (?) represents the spot where the derivations begin to differ.)
+
+program 
+list(statement) EOF 
+statement list(statement) 
+expression 
+(?)
+
+** In state 17, looking ahead at AT, reducing production
+** binOp -> expression MINUS expression
+** is permitted because of the following sub-derivation:
+
+expression AT ID // lookahead token appears
+binOp // lookahead token is inherited
+expression MINUS expression . 
+
+** In state 17, looking ahead at AT, shifting is permitted
+** because of the following sub-derivation:
+
+binOp 
+expression MINUS expression 
+                 expression . AT ID 
+
+** Conflict (shift/reduce) in state 15.
+** Token involved: AT
+** This state is reached from program after reading:
+
+expression PLUS expression
+
+** The derivations that appear below have the following common factor:
+** (The question mark symbol (?) represents the spot where the derivations begin to differ.)
+
+program 
+list(statement) EOF 
+statement list(statement) 
+expression 
+(?)
+
+** In state 15, looking ahead at AT, reducing production
+** binOp -> expression PLUS expression
+** is permitted because of the following sub-derivation:
+
+expression AT ID // lookahead token appears
+binOp // lookahead token is inherited
+expression PLUS expression . 
+
+** In state 15, looking ahead at AT, shifting is permitted
+** because of the following sub-derivation:
+
+binOp 
+expression PLUS expression 
+                expression . AT ID 

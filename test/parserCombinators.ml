@@ -1,4 +1,4 @@
-open Xmas
+(* open Xmas
 open QCheck
 
 (* let rec remove index list =
@@ -26,4 +26,4 @@ let test_replace () =
     [
       ("Replace Tests", [ test_case "Replace Test" `Quick test_replace ]);
       ("QuickCheck Tests", List.map QCheck_alcotest.to_alcotest qcheck_props);
-    ] *)
+    ] *) *)

@@ -9,9 +9,9 @@ open Ast
 %token <string> STRING
 %token TRUE
 %token FALSE
-%token TIMES "*"
 %token PLUS "+"
 %token MINUS "-"
+%token TIMES "*"
 %token DIV "/"
 %token MOD "%"
 %token EXP "^"
@@ -19,7 +19,18 @@ open Ast
 %token RPAREN ")"
 %token LBRACE "{"
 %token RBRACE "}"
+%token LBRACKET "["
+%token RBRACKET "]"
 %token EQUALS "="
+%token EQ "=="
+%token NEQ "!="
+%token LT "<"
+%token LEQ "<="
+%token GT ">"
+%token GEQ ">="
+%token AND "&&"
+%token OR "||"
+%token NOT "!"
 %token IF
 %token WHILE
 %token FOR

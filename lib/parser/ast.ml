@@ -1,4 +1,5 @@
-type 'a unaryOp = Neg of 'a | Not of 'a [@@deriving variants, show]
+type 'a unaryOp = Neg of 'a | Not of 'a
+[@@deriving show { with_path = false }]
 
 type 'a binOp =
   | Add of 'a * 'a
@@ -14,7 +15,7 @@ type 'a binOp =
   | Ge of 'a * 'a
   | And of 'a * 'a
   | Or of 'a * 'a
-[@@deriving variants, show]
+[@@deriving show { with_path = false }]
 
 type baseType =
   | Int of int
@@ -43,7 +44,6 @@ and expression =
   | Call of string * expression list
   | Var of string
   | Literal of baseType
-[@@deriving show]
+[@@deriving show { with_path = false }]
 
-type ast = Program of statement list
-[@@deriving show]
+type ast = Program of statement list [@@deriving show { with_path = false }]

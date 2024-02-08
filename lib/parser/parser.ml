@@ -1,4 +1,4 @@
-open Angstrom
+(* open Angstrom
 open Ast
 open Basic
 
@@ -191,4 +191,4 @@ and literal_parse =
     <|> char '(' *> char ')' *> return Unit)
 
 and list = lazy (brackets (sep_by (char ' ') (expr_parse 0)))
-    *)
+    *) *)
