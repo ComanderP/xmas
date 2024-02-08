@@ -46,3 +46,4 @@ and expression =
 [@@deriving show]
 
 type ast = Program of statement list
+[@@deriving show]

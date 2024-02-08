@@ -1,9 +1,14 @@
+(include_subdirs unqualified)
+
 (library
  (name xmas)
- (libraries ppx_show.runtime angstrom core)
+ (libraries ppx_show.runtime angstrom core sedlex)
  (preprocess
-  (pps ppx_show ppx_variants_conv))
+  (pps ppx_show ppx_variants_conv sedlex.ppx))
  (flags
   (:standard -warn-error -A)))
 
-(include_subdirs unqualified)
+(menhir
+ (modules parser2))
+
+(ocamllex lexer)

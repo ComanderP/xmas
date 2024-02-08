@@ -5,11 +5,11 @@ a, b, str = input().int().float()
 
 #before (a + b) {print(a)}
 
-circle: \r -> {
+circle \r -> {
     r@radius
 }
 
-f: \x y -> x + y
+f \x y -> x + y
 
 "this is a string"
 
@@ -19,22 +19,27 @@ a = (1..n)
 
 
 
-f: \x y -> {
+f \x y -> {
     x+y@sum
 }
 
-point: \x y -> {
+point \x y -> {
     x@x
     y@y
     (x^2 + y^2).sqrt()@norm
 }
+
+translate::point \x y -> {
+    .x + x@x
+    .y + y@y
+}  
 
 
 // list
 [1, 2, 3]
 
 // function definition
-name: \x y -> x + y
+name \x y -> x + y
 
 a = {
     b = {

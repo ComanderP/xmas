@@ -198,10 +198,23 @@ let json =
       | _ -> num)
   <?> "json"
 
-let () =
-  let _ = Printexc.record_backtrace true in 
-  let input = "1 + 2 == 1 " in
-  let res = runParser input Parser.expression in
-  print_endline (Ast.show_expression res)
+(* let () =
+   let _ = Printexc.record_backtrace true in
+   let input = "1 + 2 == 1 " in
+   let res = runParser input Parser.expression in
+   print_endline (Ast.show_expression res) *)
 (* print_endline (Ast.show_statement res) *)
 (* List.iter print_int res *)
+
+open Ast
+
+let parse (s : string) : ast =
+  let lexbuf = Lexing.from_string s in
+  let ast = Parser2.program Lexer.read lexbuf in
+  ast
+
+let () =
+  let _ = Printexc.record_backtrace true in
+  let input = "fun \x -> {}" in
+  let res = parse input in
+  print_endline (Ast.show_ast res)
