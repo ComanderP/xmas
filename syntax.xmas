@@ -1,12 +1,13 @@
-for parse in (int, float) {
-    (..x, str).parse() ~> (..x ++ ..str.parse())
-}
 a, b, str = input().int().float()
 
 #before (a + b) {print(a)}
 
 circle \r -> {
     r@radius
+}
+
+for a in (1, 2, 3) {
+    print(a)    
 }
 
 f \x y -> x + y
@@ -47,6 +48,8 @@ a = {
     }
 }
 
+a.b.c = 10
+
 a, b, str = input().int().float()
 
 c \ x -> x + 1
@@ -58,3 +61,19 @@ fib \ n -> fib(n-1) + fib(n-2)
 
 // function definition
 identifier \ expression expression -> expression
+
+if a == 1 {
+
+}
+
+match a {
+    \ 1 -> "one"
+    \ 2 -> "two" 
+    \ _ ->
+        { 
+            print("idk what happened")
+            "idk"
+        }
+}
+
+

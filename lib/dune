@@ -2,9 +2,9 @@
 
 (library
  (name xmas)
- (libraries ppx_show.runtime angstrom core sedlex)
+ (libraries ppx_show.runtime angstrom core )
  (preprocess
-  (pps ppx_show ppx_variants_conv sedlex.ppx))
+  (pps ppx_show ppx_variants_conv ))
  (flags
   (:standard -warn-error -A)))
 

@@ -10,6 +10,9 @@ let id = letter+
 
 rule read = parse
 | white { read lexbuf }
+| if { IF } 
+| while { WHILE } 
+| match { MATCH }
 | int { INT (int_of_string (Lexing.lexeme lexbuf)) }
 | id { ID (Lexing.lexeme lexbuf) }
 | '+' { PLUS }
