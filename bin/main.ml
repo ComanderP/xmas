@@ -208,10 +208,17 @@ let json =
 
 open Ast
 
+let string_of_pos (p : Lexing.position) : string =
+  Printf.sprintf "line %d, character %d" p.pos_lnum (p.pos_cnum - p.pos_bol)
+
 let parse (s : string) : ast =
   let lexbuf = Lexing.from_string s in
-  let ast = Parser2.program Lexer.read lexbuf in
-  ast
+  try
+    let ast = Parser2.program Lexer.read lexbuf in
+    ast
+  with e ->
+    let _ = Lexing.lexeme_start_p lexbuf |> string_of_pos |> print_endline in
+    raise e
 
 let () =
   let _ = Printexc.record_backtrace true in
