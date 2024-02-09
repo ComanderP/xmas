@@ -15,10 +15,16 @@ let test_parse (s : string) expected () =
 
 let empty_program = test_parse "" []
 let empty_scope = test_parse "{}" [ Expr (Scope []) ]
-let single_bind = test_parse "value@x" [ Expr (Bind ("x", Var "value")) ]
+let simple_bind = test_parse "value@x" [ Expr (Bind ("x", Var "value")) ]
 
-let single_addition =
+let simple_addition =
   test_parse "1 + 2" [ Expr (BinExpr (Add (Literal (Int 1), Literal (Int 2)))) ]
+
+let simple_negation =
+  test_parse "- (1)"
+    [
+      Expr (UnaryExpr (Neg (BinExpr (Add (Literal (Int 1), Literal (Int 2))))));
+    ]
 
 let () =
   let open Alcotest in
@@ -28,7 +34,8 @@ let () =
       ( "Simple expressions",
         [
           test_case "empty scope" `Quick empty_scope;
-          test_case "single bind" `Quick single_bind;
-          test_case "single addition" `Quick single_addition;
+          test_case "single bind" `Quick simple_bind;
+          test_case "single addition" `Quick simple_addition;
+          test_case "simple negation" `Quick simple_negation;
         ] );
     ]

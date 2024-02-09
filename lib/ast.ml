@@ -24,6 +24,7 @@ type baseType =
   | String of string
   | Char of char
   | List of expression list
+  | Tuple of expression list
   | Unit
 
 and statement =

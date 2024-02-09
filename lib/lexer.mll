@@ -26,11 +26,13 @@
   let string_buff = Buffer.create 256
 
   let char_for_backslash = function
-    | 'n' -> '\010'
-    | 'r' -> '\013'
     | 'b' -> '\008'
     | 't' -> '\009'
+    | 'n' -> '\010'
+    | 'r' -> '\013'
     | c   -> c
+
+  let cnt = ref 0
 }
 
 let whitespace = [' ' '\t']+
@@ -84,17 +86,17 @@ rule read = parse
   (* Punctuation *)
   | '(' { LPAREN }
   | ')' { RPAREN }
-  | '{' { LBRACE}
-  | '}' { RBRACE}
-  | '[' { LBRACKET}
-  | ']' { RBRACKET}
+  | '{' { LBRACE }
+  | '}' { RBRACE }
+  | '[' { LBRACKET }
+  | ']' { RBRACKET }
   | ',' { COMMA }
   | ';' { SEMICOLON }
   | ':' { COLON }
   | "->" { ARROW }
   | '.' { DOT }
   | '@' { AT }
-  | '\\' {BACKSLASH}
+  | '\\' { BACKSLASH }
   (* Anything else is an error *)
   | _ as c { 
       let pos = Lexing.lexeme_start_p lexbuf in

@@ -35,6 +35,7 @@ let debug = ref false
 %token OR "||"
 %token NOT "!"
 %token IF
+%token ELSE
 %token WHILE
 %token FOR
 %token IN
@@ -126,7 +127,7 @@ let variable_assignment :=
 
 let expression := 
   | scope = scope; { Scope (scope) }
-  | expr = expression; AT ; name = ID; { Bind(name, expr) } 
+  | expr = expression; AT ; name = ID; { Bind (name, expr) } 
   | binOp = binOp; { BinExpr binOp }
   | uniOp = uniOp; { UnaryExpr uniOp }
   | name = ID; { Var (name) }
@@ -158,6 +159,7 @@ let baseType :=
   | var = STRING; { String (var) }
   | var = CHAR; { Char (var) }
   | LBRACKET; vars = separated_list(COMMA, expression); RBRACKET; { List (vars) } 
+  | LPAREN; vars = separated_list(COMMA, expression); RPAREN; { Tuple (vars) }
   | TRUE; { Bool (true) }
   | FALSE; { Bool (false) }
 
