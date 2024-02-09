@@ -84,4 +84,12 @@ let () =
           test_case "\"hello\"" `Quick
             (scan_passes "\"hello\"" (STRING "hello"));
         ] );
+      ( "keywords",
+        [
+          test_case "if -> IF" `Quick (scan_passes "if" IF);
+          test_case "while -> WHILE" `Quick (scan_passes "while" WHILE);
+          test_case "for -> FOR" `Quick (scan_passes "for" FOR);
+          test_case "in -> IN" `Quick (scan_passes "in" IN);
+          test_case "match -> MATCH" `Quick (scan_passes "match" MATCH);
+        ] );
     ]
