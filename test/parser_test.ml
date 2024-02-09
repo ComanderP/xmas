@@ -22,9 +22,14 @@ let simple_addition =
 
 let simple_negation =
   test_parse "- (1)"
-    [
-      Expr (UnaryExpr (Neg (BinExpr (Add (Literal (Int 1), Literal (Int 2))))));
-    ]
+    [ Expr (UnaryExpr (Neg (Literal (Tuple [ Literal (Int 1) ])))) ]
+
+let simple_function_call =
+  test_parse "f(1, 2)"
+    [ Expr (Call ("f", [ Literal (Int 1); Literal (Int 2) ])) ]
+
+let simple_member_call =
+  test_parse "x.y" [ Expr (MemberCall (Var "x", "y", [])) ]
 
 let () =
   let open Alcotest in
@@ -37,5 +42,7 @@ let () =
           test_case "single bind" `Quick simple_bind;
           test_case "single addition" `Quick simple_addition;
           test_case "simple negation" `Quick simple_negation;
+          test_case "simple function call" `Quick simple_function_call;
+          test_case "simple member call" `Quick simple_member_call;
         ] );
     ]

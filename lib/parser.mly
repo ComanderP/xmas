@@ -132,6 +132,7 @@ let expression :=
   | uniOp = uniOp; { UnaryExpr uniOp }
   | name = ID; { Var (name) }
   | name = ID; LPAREN; params = separated_list(COMMA, expression); RPAREN; { Call(name, params) }
+  | expr = expression; DOT; name = ID; { MemberCall(expr, name, []) }
   | expr = expression; DOT; name = ID; LPAREN; params = separated_list(COMMA, expression); RPAREN; { MemberCall(expr, name, params) }
   | value = baseType; { Literal (value) }
 
