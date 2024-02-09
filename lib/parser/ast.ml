@@ -46,4 +46,4 @@ and expression =
   | Literal of baseType
 [@@deriving show { with_path = false }]
 
-type ast = Program of statement list [@@deriving show { with_path = false }]
+type t = Program of statement list [@@deriving show { with_path = false }]

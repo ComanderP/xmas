@@ -1,6 +1,8 @@
 (* Header file for the parser *)
 %{
 open Ast
+
+let debug = ref false
 %}
 (* Tokens *)
 %token <int> INT
@@ -55,7 +57,7 @@ open Ast
 %left TIMES
 %left DIV
 (* Start symbol *)
-%start <ast> program
+%start <t> program
 
 (* Grammar rules *)
 %%
@@ -119,4 +121,5 @@ let uniOp :=
 
 let baseType := 
   | var = INT; { Int (var) } 
+  | var = STRING; { String (var) }
 
