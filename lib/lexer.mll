@@ -16,36 +16,51 @@
     create_hashtable 8 [
       ("if", IF);
       ("while", WHILE);
+      ("for", FOR);
+      ("in", IN);
       ("match", MATCH);
       ("true", TRUE);
       ("false", FALSE);
     ]
+
+  let string_buff = Buffer.create 256
+
+  let char_for_backslash = function
+    | 'n' -> '\010'
+    | 'r' -> '\013'
+    | 'b' -> '\008'
+    | 't' -> '\009'
+    | c   -> c
 }
 
 let whitespace = [' ' '\t']+
 let newline = '\n' | '\r' | "\r\n"
 let letter = ['a'-'z' 'A'-'Z']
 let digit = ['0'-'9']
+let number = (digit | '_')+ 
 let alphanum = letter | digit
-let id =  letter alphanum*
-let int = '-'? digit+
-let float = '-'? digit+ '.' digit*
+let id =  (letter | '_') (alphanum | '_')*
+let int = '-'? number
+let float = '-'? number '.' (digit | '_')* 
 let string = '"' [^'"']* '"'
+
+
+
+let backslash_escapes = ['\\' '\'' '"' 'n' 't' 'b' 'r' ' ']
 
 rule read = parse
   | whitespace { read lexbuf }
   | newline { NEWLINE }
   | int { INT (int_of_string (Lexing.lexeme lexbuf)) }
   | float { FLOAT (float_of_string (Lexing.lexeme lexbuf)) }
-  | string { let str = (String.sub (Lexing.lexeme lexbuf) 1 (String.length (Lexing.lexeme lexbuf) - 2)) in 
-      if String.length str = 1 then CHAR str.[0]  else STRING str  
-    }
   | id as word { 
       try
         let token = Hashtbl.find keyword_table word in
         token
       with Not_found -> ID word
     }
+  | '"' { string lexbuf }
+  | '\'' {string2 lexbuf }
   (* Basic operators *)
   | '=' { EQUALS }
   | '+' { PLUS }
@@ -87,3 +102,33 @@ rule read = parse
     }
   (* End of file *)
   | eof { EOF }
+and string = parse
+  | '"' { 
+    let str = Buffer.contents string_buff in
+    if String.length str = 1
+    then CHAR str.[0]
+    else STRING str
+    }
+  | '\\' (backslash_escapes as c) {
+    Buffer.add_char string_buff (char_for_backslash c);
+    string lexbuf }
+  | _ as c { 
+    Printf.printf "char: '%c'\n" c;
+    Buffer.add_char string_buff c;
+    string lexbuf }
+  | eof { raise (BadInput "unexpected end of file") }
+and string2 = parse
+  | '\'' {
+    let str = Buffer.contents string_buff in
+    if String.length str = 1
+    then CHAR str.[0]
+    else raise (BadInput "string too long")
+  }
+  | '\\' (backslash_escapes as c) {
+    Buffer.add_char string_buff (char_for_backslash c);
+    string2 lexbuf }
+  | _ as c { 
+    Printf.printf "char: '%c'\n" c;
+    Buffer.add_char string_buff c;
+    string2 lexbuf }
+  | eof { raise (BadInput "unexpected end of file") }

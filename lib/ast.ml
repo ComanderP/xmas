@@ -20,7 +20,7 @@ type 'a binOp =
 type baseType =
   | Int of int
   | Bool of bool
-  | Float of float 
+  | Float of float
   | String of string
   | Char of char
   | List of expression list

@@ -23,7 +23,7 @@ let () =
           test_case "+ -> PLUS" `Quick (scan_passes "+" PLUS);
           test_case "- -> MINUS" `Quick (scan_passes "-" MINUS);
           test_case "* -> TIMES" `Quick (scan_passes "*" TIMES);
-          test_case "/ -> DIVIDE" `Quick (scan_passes "/" DIV);
+          test_case "/ -> DIV" `Quick (scan_passes "/" DIV);
           test_case "^ -> EXP" `Quick (scan_passes "^" EXP);
           test_case "% -> MOD" `Quick (scan_passes "%" MOD);
         ] );
@@ -51,5 +51,37 @@ let () =
         [
           test_case "true -> TRUE" `Quick (scan_passes "true" TRUE);
           test_case "false -> FALSE" `Quick (scan_passes "false" FALSE);
+        ] );
+      ( "integers",
+        [
+          test_case "0 -> INT 0" `Quick (scan_passes "0" (INT 0));
+          test_case "1 -> INT 1" `Quick (scan_passes "1" (INT 1));
+          test_case "123 -> INT 123" `Quick (scan_passes "123" (INT 123));
+        ] );
+      ( "floats",
+        [
+          test_case "0.0" `Quick (scan_passes "0.0" (FLOAT 0.0));
+          test_case "-1.0" `Quick (scan_passes "-1.0" (FLOAT (-1.0)));
+          test_case "123.456" `Quick (scan_passes "123.456" (FLOAT 123.456));
+          test_case "360." `Quick (scan_passes "360." (FLOAT 360.));
+          test_case "123.456_789" `Quick
+            (scan_passes "123.456_789" (FLOAT 123.456789));
+        ] );
+      ( "identifiers",
+        [
+          test_case "x -> ID x" `Quick (scan_passes "x" (ID "x"));
+          test_case "x1 -> ID x1" `Quick (scan_passes "x1" (ID "x1"));
+          test_case "x_ -> ID x_" `Quick (scan_passes "x_" (ID "x_"));
+          test_case "x_1 -> ID x_1" `Quick (scan_passes "x_1" (ID "x_1"));
+        ] );
+      ( "whitespace",
+        [
+          test_case " " `Quick (scan_passes " " EOF);
+          test_case "\t" `Quick (scan_passes "\t" EOF);
+        ] );
+      ( "strings",
+        [
+          test_case "\"hello\"" `Quick
+            (scan_passes "\"hello\"" (STRING "hello"));
         ] );
     ]
