@@ -43,13 +43,14 @@ let id =  (letter | '_') (alphanum | '_')*
 let int = '-'? number
 let float = '-'? number '.' (digit | '_')* 
 let string = '"' [^'"']* '"'
-
+let comment = ';' [^'\n']*
 
 
 let backslash_escapes = ['\\' '\'' '"' 'n' 't' 'b' 'r' ' ']
 
 rule read = parse
   | whitespace { read lexbuf }
+  | comment { read lexbuf }
   | newline { NEWLINE }
   | int { INT (int_of_string (Lexing.lexeme lexbuf)) }
   | float { FLOAT (float_of_string (Lexing.lexeme lexbuf)) }
