@@ -2,13 +2,13 @@
 
 (library
  (name xmas)
- (libraries ppx_show.runtime angstrom core )
+ (libraries ppx_show.runtime core)
  (preprocess
-  (pps ppx_show ppx_variants_conv ))
+  (pps ppx_show))
  (flags
   (:standard -warn-error -A)))
 
 (menhir
- (modules parser2))
+ (modules parser))
 
 (ocamllex lexer)

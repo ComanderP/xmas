@@ -1,5 +1,7 @@
 (tests
- (names basicParsers parserCombinators)
+ (names lexer_test parser_test)
  (libraries xmas ppx_show.runtime alcotest qcheck qcheck-alcotest)
  (preprocess
-  (pps ppx_show)))
+  (pps ppx_show))
+ (flags
+  (:standard -warn-error -A)))

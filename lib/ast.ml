@@ -32,7 +32,7 @@ and statement =
   | If of expression * scope
   | While of expression * scope
   | For of string * expression * scope
-  | Match of expression * (expression * statement list) list
+  | Match of expression * (expression * scope) list
 
 and scope = statement list
 

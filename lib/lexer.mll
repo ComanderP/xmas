@@ -1,5 +1,5 @@
 {
-  open Parser2
+  open Parser
 
   exception BadInput of string
 
@@ -17,6 +17,8 @@
       ("if", IF);
       ("while", WHILE);
       ("match", MATCH);
+      ("true", TRUE);
+      ("false", FALSE);
     ]
 }
 
