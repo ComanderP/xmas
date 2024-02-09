@@ -75,7 +75,20 @@ let debug = ref false
 
 (* A program is a list of statements *)
 let program :=
-  | ss = statement*; EOF; { Program (ss) }
+  | prog =statement_list_eof ; {Program (prog) }
+
+
+let statement_list_eof:=
+| NEWLINE+; statement_list_eof = statement_list_eof; {statement_list_eof}
+| s = statement; EOF; { s::[] }
+| s = statement; NEWLINE+; rest = statement_list_eof; {s :: rest}
+| EOF; { [] }
+
+let statement_list_scope:=
+| NEWLINE+; statement_list_scope = statement_list_scope; {statement_list_scope}
+| s = statement; RBRACE; { s::[] }
+| s = statement; NEWLINE+; rest = statement_list_scope; {s :: rest}
+| RBRACE; { [] }
 
 (* A statement is either a function definition, a variable assignment, an expression, an if statement, a while loop, a for loop, or a match statement *)
 let statement :=
@@ -107,7 +120,7 @@ let match_branch :=
   | BACKSLASH; value = expression; ARROW; statements = statement+; { (value, statements) } 
 
 let scope :=
-  | LBRACE ; s = statement*; RBRACE; { s }
+  | LBRACE ; s = statement_list_scope; { s }
 
 let variable_assignment := 
   | name = ID; "="; expr = expression; { Assign (name, expr) } 
