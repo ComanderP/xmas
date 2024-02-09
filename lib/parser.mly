@@ -75,20 +75,19 @@ let debug = ref false
 
 (* A program is a list of statements *)
 let program :=
-  | prog =statement_list_eof ; {Program (prog) }
+  | prog = statement_list_eof; { Program (prog) }
 
+let statement_list_eof :=
+  | NEWLINE+; statement_list_eof = statement_list_eof; { statement_list_eof }
+  | s = statement; EOF; { s::[] }
+  | s = statement; NEWLINE+; rest = statement_list_eof; { s :: rest }
+  | EOF; { [] }
 
-let statement_list_eof:=
-| NEWLINE+; statement_list_eof = statement_list_eof; {statement_list_eof}
-| s = statement; EOF; { s::[] }
-| s = statement; NEWLINE+; rest = statement_list_eof; {s :: rest}
-| EOF; { [] }
-
-let statement_list_scope:=
-| NEWLINE+; statement_list_scope = statement_list_scope; {statement_list_scope}
-| s = statement; RBRACE; { s::[] }
-| s = statement; NEWLINE+; rest = statement_list_scope; {s :: rest}
-| RBRACE; { [] }
+let statement_list_scope :=
+  | NEWLINE+; statement_list_scope = statement_list_scope; { statement_list_scope }
+  | s = statement; RBRACE; { s::[] }
+  | s = statement; NEWLINE+; rest = statement_list_scope; { s :: rest }
+  | RBRACE; { [] }
 
 (* A statement is either a function definition, a variable assignment, an expression, an if statement, a while loop, a for loop, or a match statement *)
 let statement :=
