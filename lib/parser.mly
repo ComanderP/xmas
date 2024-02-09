@@ -9,6 +9,7 @@ let debug = ref false
 %token <float> FLOAT
 %token <string> ID
 %token <string> STRING
+%token <char> CHAR 
 %token TRUE
 %token FALSE
 %token PLUS "+"
@@ -51,18 +52,26 @@ let debug = ref false
 (* Associativity and precedence *)
 %nonassoc IN
 %nonassoc ELSE
+%left AND 
+%left OR  
+%left EQ  
+%left NEQ  
+%left LT
 %left LEQ
+%left GT 
+%left GEQ
 %left PLUS
 %left MINUS
 %left TIMES
 %left DIV
+%left MOD 
+
+
 (* Start symbol *)
 %start <t> program
 
 (* Grammar rules *)
 %%
-
-
 
 (* A program is a list of statements *)
 let program :=
@@ -110,16 +119,34 @@ let expression :=
   | uniOp = uniOp; { UnaryExpr uniOp }
   | name = ID; { Var (name) }
   | name = ID; LPAREN; params = separated_list(COMMA, expression); RPAREN; { Call(name, params) }
+  | expr = expression; DOT; name = ID; LPAREN; params = separated_list(COMMA, expression); RPAREN; { MemberCall(expr, name, params) }
   | value = baseType; { Literal (value) }
 
 let binOp := 
   | var1 = expression; PLUS; var2 = expression; { Add (var1, var2) }
   | var1 = expression; MINUS; var2 = expression; { Sub (var1, var2) }
+  | var1 = expression; TIMES; var2 = expression; { Mul (var1, var2) }
+  | var1 = expression; DIV; var2 = expression; { Div (var1, var2) }
+  | var1 = expression; MOD; var2 = expression; { Mod (var1, var2) }
+  | var1 = expression; EQ; var2 = expression; { Eq (var1, var2) }
+  | var1 = expression; NEQ; var2 = expression; { Neq (var1, var2) }
+  | var1 = expression; LT; var2 = expression; { Lt (var1, var2) }
+  | var1 = expression; LEQ; var2 = expression; { Le (var1, var2) }
+  | var1 = expression; GT; var2 = expression; { Gt (var1, var2) }
+  | var1 = expression; GEQ; var2 = expression; { Ge (var1, var2) }
+  | var1 = expression; AND ; var2 = expression; { And (var1, var2) }
+  | var1 = expression; OR ; var2 = expression; { Or (var1, var2) }
 
 let uniOp := 
   | MINUS; var = expression; { Neg (var) }
 
 let baseType := 
   | var = INT; { Int (var) } 
+  | var = FLOAT; { Float (var) } 
   | var = STRING; { String (var) }
+  | var = CHAR; { Char (var) }
+  | LBRACKET; vars = separated_list(COMMA, expression); RBRACKET; { List (vars) } 
+  | TRUE; { Bool (true) }
+  | FALSE; { Bool (false) }
+
 

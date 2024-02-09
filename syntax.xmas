@@ -76,4 +76,9 @@ match a {
         }
 }
 
+match a == b {
+    \ True -> { print("Equal") }
+    \ False -> { print("Different") }
+}
+
 

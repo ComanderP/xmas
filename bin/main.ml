@@ -6,6 +6,6 @@ let parse (s : string) : Ast.t =
   ast
 
 let () =
-  let input = "\"Hello\"" in
+  let input = "input().int().float()" in
   let res = parse input in
   print_endline (Ast.show res)

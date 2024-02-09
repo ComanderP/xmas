@@ -20,6 +20,7 @@ type 'a binOp =
 type baseType =
   | Int of int
   | Bool of bool
+  | Float of float 
   | String of string
   | Char of char
   | List of expression list
@@ -42,6 +43,7 @@ and expression =
   | BinExpr of expression binOp
   | UnaryExpr of expression unaryOp
   | Call of string * expression list
+  | MemberCall of expression * string * expression list
   | Var of string
   | Literal of baseType
 [@@deriving show { with_path = false }]

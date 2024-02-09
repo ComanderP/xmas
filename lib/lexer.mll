@@ -37,7 +37,9 @@ rule read = parse
   | newline { NEWLINE }
   | int { INT (int_of_string (Lexing.lexeme lexbuf)) }
   | float { FLOAT (float_of_string (Lexing.lexeme lexbuf)) }
-  | string { STRING (String.sub (Lexing.lexeme lexbuf) 1 (String.length (Lexing.lexeme lexbuf) - 2)) }
+  | string { let str = (String.sub (Lexing.lexeme lexbuf) 1 (String.length (Lexing.lexeme lexbuf) - 2)) in 
+      if String.length str = 1 then CHAR str.[0]  else STRING str  
+    }
   | id as word { 
       try
         let token = Hashtbl.find keyword_table word in
