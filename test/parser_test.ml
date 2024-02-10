@@ -1,4 +1,3 @@
-open QCheck2
 open Xmas
 open Xmas.Ast
 
@@ -31,6 +30,28 @@ let simple_function_call =
 let simple_member_call =
   test_parse "x.y" [ Expr (MemberCall (Var "x", "y", [])) ]
 
+let variable = test_parse "x" [ Expr (Var "x") ]
+let literal = test_parse "1" [ Expr (Literal (Int 1)) ]
+
+let simple_fun_def =
+  test_parse "f \\ x y -> {}" [ FunDef ("f", [ "x"; "y" ], []) ]
+
+let simple_assign = test_parse "x = 1" [ Assign ("x", Literal (Int 1)) ]
+let simple_if = test_parse "if true {}" [ If (Literal (Bool true), []) ]
+
+let simple_while =
+  test_parse "while true {}" [ While (Literal (Bool true), []) ]
+
+let simple_for =
+  test_parse "for x in [1, 2] {}"
+    [ For ("x", Literal (List [ Literal (Int 1); Literal (Int 2) ]), []) ]
+
+let simple_match =
+  test_parse "match x { \\ true -> {} \\ false -> {} }"
+    [
+      Match (Var "x", [ (Literal (Bool true), []); (Literal (Bool false), []) ]);
+    ]
+
 let () =
   let open Alcotest in
   run "Parser"
@@ -44,5 +65,16 @@ let () =
           test_case "simple negation" `Quick simple_negation;
           test_case "simple function call" `Quick simple_function_call;
           test_case "simple member call" `Quick simple_member_call;
+          test_case "simple var" `Quick variable;
+          test_case "simple literal" `Quick literal;
+        ] );
+      ( "Simple statements",
+        [
+          test_case "simple function definition" `Quick simple_fun_def;
+          test_case "simple assignment" `Quick simple_assign;
+          test_case "simple if" `Quick simple_if;
+          test_case "simple while" `Quick simple_while;
+          test_case "simple for" `Quick simple_for;
+          test_case "simple match" `Quick simple_match;
         ] );
     ]

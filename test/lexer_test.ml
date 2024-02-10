@@ -1,4 +1,3 @@
-open QCheck2
 open Xmas
 open Xmas.Parser
 
