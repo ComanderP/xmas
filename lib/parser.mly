@@ -161,7 +161,7 @@ let baseType :=
   | var = STRING; { String (var) }
   | var = CHAR; { Char (var) }
   | LBRACKET; vars = separated_list(COMMA, expression); RBRACKET; { List (vars) } 
-  | LPAREN; vars = separated_nonempty_list(COMMA, expression); RPAREN; { Tuple (vars) }
+  | LPAREN; vars = separated_list(COMMA, expression); RPAREN; { Tuple (vars) }
   | TRUE; { Bool (true) }
   | FALSE; { Bool (false) }
 
