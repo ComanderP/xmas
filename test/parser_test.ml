@@ -21,7 +21,7 @@ let simple_addition =
 
 let simple_negation =
   test_parse "- (1)"
-    [ Expr (UnaryExpr (Neg (Literal (Tuple [ Literal (Int 1) ])))) ]
+    [ Expr (UnaryExpr (Neg (Literal (Int 1) ))) ]
 
 let simple_function_call =
   test_parse "f(1, 2)"

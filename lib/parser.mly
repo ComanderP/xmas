@@ -117,7 +117,7 @@ let match_statement :=
   | MATCH; expr = expression; LBRACE; branches = match_branch+; RBRACE; { Match (expr, branches) } 
 
 let match_branch :=
-  | BACKSLASH; value = expression; ARROW; statements = statement+; { (value, statements) } 
+  | BACKSLASH; value = expression; ARROW; statements = scope; { (value, statements) } 
 
 let scope :=
   | LBRACE ; s = statement_list_scope; { s }
@@ -128,6 +128,7 @@ let variable_assignment :=
 let expression := 
   | scope = scope; { Scope (scope) }
   | expr = expression; AT ; name = ID; { Bind (name, expr) } 
+  | LPAREN; expr = expression; RPAREN; { expr }
   | binOp = binOp; { BinExpr binOp }
   | uniOp = uniOp; { UnaryExpr uniOp }
   | name = ID; { Var (name) }
@@ -160,7 +161,7 @@ let baseType :=
   | var = STRING; { String (var) }
   | var = CHAR; { Char (var) }
   | LBRACKET; vars = separated_list(COMMA, expression); RBRACKET; { List (vars) } 
-  | LPAREN; vars = separated_list(COMMA, expression); RPAREN; { Tuple (vars) }
+  | LPAREN; vars = separated_nonempty_list(COMMA, expression); RPAREN; { Tuple (vars) }
   | TRUE; { Bool (true) }
   | FALSE; { Bool (false) }
 
