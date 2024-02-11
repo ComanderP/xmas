@@ -2,13 +2,14 @@
 
 (library
  (name xmas)
- (libraries ppx_show.runtime core)
+ (libraries ppx_show.runtime menhirLib)
  (preprocess
   (pps ppx_show))
  (flags
   (:standard -warn-error -A)))
 
 (menhir
- (modules parser))
+ (modules parser)
+ (flags :standard --table))
 
 (ocamllex lexer)

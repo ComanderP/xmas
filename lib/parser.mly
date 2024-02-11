@@ -50,21 +50,17 @@ open Ast
 %token NEWLINE
 %token EOF
 (* Associativity and precedence *)
-// %nonassoc ELSE
-// %right EQUALS
-%left AND 
-%left OR  
-%left EQ  
-%left NEQ  
-%left LT
-%left LEQ
-%left GT 
-%left GEQ
-%left PLUS
-%left MINUS
-%left TIMES
-%left DIV
-%left MOD 
+%nonassoc AT
+%left OR
+%left AND
+%left EQ NEQ
+%left LT LEQ GT GEQ // TODO: should we have nonassoc for these? (i.e. 1 < 2 < 3 should be a syntax error)
+%left PLUS MINUS
+%left TIMES DIV MOD
+%right EXP
+%left NOT
+%left DOT
+
 
 
 (* Start symbol *)

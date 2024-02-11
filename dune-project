@@ -1,11 +1,11 @@
-(lang dune 3.10)
+(lang dune 3.13)
 
 (name xmas)
 
-(generate_opam_files true)
+(generate_opam_files false)
 
 (source
- (github username/reponame))
+ (github ComanderP/xmas))
 
 (authors "Author Name")
 
@@ -19,10 +19,13 @@
  (name xmas)
  (synopsis "A short synopsis")
  (description "A longer description")
- (depends ocaml dune (alcotest :with-test))
+ (depends
+  ocaml
+  dune
+  (alcotest :with-test))
  (tags
   (topics "to describe" your project)))
 
-(using menhir 2.1)
+(using menhir 3.0)
 
 ; See the complete stanza docs at https://dune.readthedocs.io/en/stable/dune-files.html#dune-project
