@@ -50,7 +50,7 @@ open Ast
 %token NEWLINE
 %token EOF
 (* Associativity and precedence *)
-%nonassoc AT
+%left AT
 %left OR
 %left AND
 %left EQ NEQ
@@ -60,7 +60,6 @@ open Ast
 %right EXP
 %left NOT
 %left DOT
-
 
 
 (* Start symbol *)
@@ -74,7 +73,7 @@ let program :=
   | prog = statement_list_eof; { Program (prog) }
 
 let statement_list_eof :=
-  | NEWLINE+; statement_list_eof = statement_list_eof; { statement_list_eof }
+  | NEWLINE+; statement_list_eof = statement_list_eof; { statement_list_eof } // FIXME: shift/reduce conflict because of NEWLINE+
   | s = statement; EOF; { s::[] }
   | s = statement; NEWLINE+; rest = statement_list_eof; { s :: rest }
   | EOF; { [] }
@@ -123,7 +122,7 @@ let variable_assignment :=
 let expression := 
   | scope = scope; { Scope (scope) }
   | expr = expression; AT ; name = ID; { Bind (name, expr) } 
-  | LPAREN; expr = expression; RPAREN; { expr }
+  | LPAREN; expr = expression; RPAREN; { expr } // FIXME: shift/reduce conflict with basicType tuple
   | binOp = binOp; { BinExpr binOp }
   | uniOp = uniOp; { UnaryExpr uniOp }
   | name = ID; { Var (name) }
@@ -158,7 +157,7 @@ let baseType :=
   | var = STRING; { String (var) }
   | var = CHAR; { Char (var) }
   | LBRACKET; vars = separated_list(COMMA, expression); RBRACKET; { List (vars) } 
-  | LPAREN; vars = separated_list(COMMA, expression); RPAREN; { Tuple (vars) }
+  | LPAREN; vars = separated_list(COMMA, expression); RPAREN; { Tuple (vars) } // FIXME: shift/reduce conflict with LPAREN expression RPAREN
   | TRUE; { Bool (true) }
   | FALSE; { Bool (false) }
 
