@@ -156,9 +156,13 @@ let baseType :=
   | var = FLOAT; { Float (var) } 
   | var = STRING; { String (var) }
   | var = CHAR; { Char (var) }
-  | LBRACKET; vars = separated_list(COMMA, expression); RBRACKET; { List (vars) } 
-  | LPAREN; vars = separated_list(COMMA, expression); RPAREN; { Tuple (vars) } // FIXME: shift/reduce conflict with LPAREN expression RPAREN
+  | LBRACKET; vars = separated_list(COMMA, expression); RBRACKET; { List vars } 
+  | LPAREN; vars = tuple; RPAREN; { Tuple vars }
   | TRUE; { Bool (true) }
   | FALSE; { Bool (false) }
 
+// This fixes the shift/reduce conflict with RPAREN, but I think the syntax changed a bit
+let tuple := 
+  | var1 = expression; COMMA ; { var1::[] }
+  | var1 = expression; COMMA; vars = tuple; { var1::vars }
 
