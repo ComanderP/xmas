@@ -1,7 +1,7 @@
 {
   open Parser
 
-  exception BadInput of string
+  exception LexicalError of string
 
   let string_of_pos (p : Lexing.position) : string =
     Printf.sprintf "line %d, characters %d-%d"
@@ -91,8 +91,8 @@ rule read = parse
   | '[' { LBRACKET }
   | ']' { RBRACKET }
   | ',' { COMMA }
-  | ';' { SEMICOLON }
-  | ':' { COLON }
+  (* | ';' { SEMICOLON } *)
+  (* | ':' { COLON } *)
   | "->" { ARROW }
   | '.' { DOT }
   | '@' { AT }
@@ -100,8 +100,8 @@ rule read = parse
   (* Anything else is an error *)
   | _ as c { 
       let pos = Lexing.lexeme_start_p lexbuf in
-      let msg = Printf.sprintf "unexpected character %c at %s" c (string_of_pos pos) in
-      raise (BadInput msg) 
+      let msg = Printf.sprintf "Unexpected character %c at %s" c (string_of_pos pos) in
+      raise (LexicalError msg) 
     }
   (* End of file *)
   | eof { EOF }
@@ -116,22 +116,20 @@ and string = parse
     Buffer.add_char string_buff (char_for_backslash c);
     string lexbuf }
   | _ as c { 
-    Printf.printf "char: '%c'\n" c;
     Buffer.add_char string_buff c;
     string lexbuf }
-  | eof { raise (BadInput "unexpected end of file") }
+  | eof { raise (LexicalError "Unterminated string. Expected '\"'") }
 and string2 = parse
   | '\'' {
     let str = Buffer.contents string_buff in
     if String.length str = 1
     then CHAR str.[0]
-    else raise (BadInput "string too long")
+    else STRING str
   }
   | '\\' (backslash_escapes as c) {
     Buffer.add_char string_buff (char_for_backslash c);
     string2 lexbuf }
   | _ as c { 
-    Printf.printf "char: '%c'\n" c;
     Buffer.add_char string_buff c;
     string2 lexbuf }
-  | eof { raise (BadInput "unexpected end of file") }
+  | eof { raise (LexicalError "Unterminated string. Expected \"'\"") }

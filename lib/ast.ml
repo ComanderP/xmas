@@ -7,6 +7,7 @@ type 'a binOp =
   | Mul of 'a * 'a
   | Div of 'a * 'a
   | Mod of 'a * 'a
+  | Exp of 'a * 'a
   | Eq of 'a * 'a
   | Neq of 'a * 'a
   | Lt of 'a * 'a

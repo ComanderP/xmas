@@ -2,7 +2,6 @@
 %{
 open Ast
 
-let debug = ref false
 %}
 (* Tokens *)
 %token <int> INT
@@ -31,28 +30,28 @@ let debug = ref false
 %token LEQ "<="
 %token GT ">"
 %token GEQ ">="
-%token AND "&&"
-%token OR "||"
-%token NOT "!"
+%token AND
+%token OR
+%token NOT
 %token IF
-%token ELSE
+// %token ELSE
 %token WHILE
 %token FOR
 %token IN
 %token MATCH
-%token HASHTAG "#"
+// %token HASHTAG "#"
 %token COMMA ","
-%token SEMICOLON ";"
+// %token SEMICOLON ";"
 %token DOT "."
 %token BACKSLASH "\\"
-%token COLON ":" 
+// %token COLON ":" 
 %token ARROW "->"
 %token AT "@"
 %token NEWLINE
 %token EOF
 (* Associativity and precedence *)
-%nonassoc IN
-%nonassoc ELSE
+// %nonassoc ELSE
+// %right EQUALS
 %left AND 
 %left OR  
 %left EQ  
@@ -143,6 +142,7 @@ let binOp :=
   | var1 = expression; TIMES; var2 = expression; { Mul (var1, var2) }
   | var1 = expression; DIV; var2 = expression; { Div (var1, var2) }
   | var1 = expression; MOD; var2 = expression; { Mod (var1, var2) }
+  | var1 = expression; EXP; var2 = expression; { Exp (var1, var2) }
   | var1 = expression; EQ; var2 = expression; { Eq (var1, var2) }
   | var1 = expression; NEQ; var2 = expression; { Neq (var1, var2) }
   | var1 = expression; LT; var2 = expression; { Lt (var1, var2) }
@@ -154,6 +154,7 @@ let binOp :=
 
 let uniOp := 
   | MINUS; var = expression; { Neg (var) }
+  | NOT; var = expression; { Not (var) }
 
 let baseType := 
   | var = INT; { Int (var) } 
