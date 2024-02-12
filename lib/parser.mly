@@ -77,10 +77,8 @@ let statement_list_eof :=
   | s = statement; NEWLINE+; rest = statement_list_eof; { s :: rest }
 
 let statement_list_scope :=
-  | NEWLINE+; statement_list_scope = statement_list_scope; { statement_list_scope }
-  | s = statement; RBRACE; { s::[] }
+  | s = statement; NEWLINE*; { s::[] }
   | s = statement; NEWLINE+; rest = statement_list_scope; { s :: rest }
-  | RBRACE; { [] }
 
 (* A statement is either a function definition, a variable assignment, an expression, an if statement, a while loop, a for loop, or a match statement *)
 let statement :=
@@ -112,7 +110,8 @@ let match_branch :=
   | BACKSLASH; value = expression; ARROW; statements = scope; { (value, statements) } 
 
 let scope :=
-  | LBRACE ; s = statement_list_scope; { s }
+  | LBRACE; NEWLINE*; RBRACE; { [] }
+  | LBRACE; NEWLINE*; s = statement_list_scope; RBRACE; { s }
 
 let variable_assignment := 
   | name = ID; "="; expr = expression; { Assign (name, expr) } 
@@ -120,7 +119,7 @@ let variable_assignment :=
 let expression := 
   | scope = scope; { Scope scope }
   | expr = expression; AT ; name = ID; { Bind (name, expr) } 
-  | LPAREN; expr = expression; RPAREN; { expr } // FIXME: shift/reduce conflict with basicType tuple
+  | LPAREN; expr = expression; RPAREN; { expr }
   | binOp = binOp; { BinExpr binOp }
   | uniOp = uniOp; { UnaryExpr uniOp }
   | name = ID; { Var name }

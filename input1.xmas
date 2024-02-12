@@ -1,5 +1,10 @@
-something = (1 + 2, (,1,)); 
+; something = (1 + 2, (,1,)); 
 
-for i in [1, 2, 3] {
-    print(i); 
+; for i in [1, 2, 3] {
+;     print(i); 
+; }
+
+
+if 5 {
+    a = 1;
 }
