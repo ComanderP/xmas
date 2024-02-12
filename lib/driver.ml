@@ -8,8 +8,8 @@ module L = MenhirLib.LexerUtil
 (** The function call [attempt1 filename] returns normally only if a syntax
       error has occurred while parsing [filename]. In that case, it returns the
       content of the file. **)
-let fast_parse text =
-  let lexbuf = Lexing.from_string text in
+let fast_parse filename =
+  let _, lexbuf = L.read filename in
   match Parser.program Lexer.read lexbuf with
   | v -> Ok v
   | exception Lexer.LexicalError msg -> Error (Lexer.LexicalError msg)
@@ -51,11 +51,7 @@ let get text checkpoint i =
          into the known suffix of the stack. *)
       "???"
 
-(** [succeed v] is invoked when the parser has succeeded and produced a
-   semantic value [v]. In our setting, this cannot happen, since the
-   table-based parser is invoked only when we know that there is a
-   syntax error in the input file. **)
-let succeed _v = assert false
+let succeed _ = assert false
 
 (** [fail text buffer checkpoint] is invoked when parser has encountered a
    syntax error. **)
@@ -73,9 +69,9 @@ let fail text buffer (checkpoint : _ I.checkpoint) =
   exit 1
 
 (** [attempt2 filename text] runs the parser. **)
-let parse text =
+let parse filename =
   (* Allocate and initialize a lexing buffer. *)
-  let lexbuf = Lexing.from_string text in
+  let text, lexbuf = L.read filename in
   (* Wrap the lexer and lexbuf together into a supplier, that is, a
      function of type [unit -> token * position * position]. *)
   let supplier = I.lexer_lexbuf_to_supplier Lexer.read lexbuf in
@@ -89,3 +85,36 @@ let parse text =
   (* We do not handle [Lexer.Error] because we know that we will not
      encounter a lexical error during this second parsing run. *)
   I.loop_handle succeed (fail text buffer) supplier checkpoint
+
+exception SyntaxError of ((int * int) option * string)
+
+let get_lexing_position lexbuf =
+  let p = Lexing.lexeme_start_p lexbuf in
+  let line_number = p.Lexing.pos_lnum in
+  let column = p.Lexing.pos_cnum - p.Lexing.pos_bol + 1 in
+  (line_number, column)
+
+let get_parse_error env =
+  match I.stack env with
+  | (lazy Nil) -> "Invalid syntax"
+  | (lazy (Cons (I.Element (state, _, _, _), _))) -> (
+      try ParserMessages.message (I.number state)
+      with Not_found -> "invalid syntax (no specific message for this eror)")
+
+let rec parse lexbuf (checkpoint : _ I.checkpoint) =
+  match checkpoint with
+  | I.InputNeeded _env ->
+      let token = Lexer.read lexbuf in
+      let startp = lexbuf.lex_start_p and endp = lexbuf.lex_curr_p in
+      let checkpoint = I.offer checkpoint (token, startp, endp) in
+      parse lexbuf checkpoint
+  | I.Shifting _ | I.AboutToReduce _ ->
+      let checkpoint = I.resume checkpoint in
+      parse lexbuf checkpoint
+  | I.HandlingError _env ->
+      let line, pos = get_lexing_position lexbuf in
+      let err = get_parse_error _env in
+      raise (SyntaxError (Some (line, pos), err))
+  | I.Accepted v -> v
+  | I.Rejected ->
+      raise (SyntaxError (None, "invalid syntax (parser rejected the input)"))

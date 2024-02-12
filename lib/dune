@@ -26,7 +26,7 @@
  (modules errorParser)
  (flags :standard --table --external-tokens Parser))
 
-; The target for saving menhir's stdout to bnf_parser_messages.ml
+;; For the error messages
 
 (rule
  (targets parser.messages)
