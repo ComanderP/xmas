@@ -68,15 +68,13 @@ open Ast
 (* Grammar rules *)
 %%
 
-(* A program is a list of statements *)
 let program :=
-  | prog = statement_list_eof; { Program (prog) }
+  | NEWLINE*; EOF; { Program [] }
+  | NEWLINE*; prog = statement_list_eof; EOF; { Program prog }
 
 let statement_list_eof :=
-  | NEWLINE+; statement_list_eof = statement_list_eof; { statement_list_eof } // FIXME: shift/reduce conflict because of NEWLINE+
-  | s = statement; EOF; { s::[] }
+  | s = statement; NEWLINE*; { s::[] }
   | s = statement; NEWLINE+; rest = statement_list_eof; { s :: rest }
-  | EOF; { [] }
 
 let statement_list_scope :=
   | NEWLINE+; statement_list_scope = statement_list_scope; { statement_list_scope }
@@ -120,16 +118,16 @@ let variable_assignment :=
   | name = ID; "="; expr = expression; { Assign (name, expr) } 
 
 let expression := 
-  | scope = scope; { Scope (scope) }
+  | scope = scope; { Scope scope }
   | expr = expression; AT ; name = ID; { Bind (name, expr) } 
   | LPAREN; expr = expression; RPAREN; { expr } // FIXME: shift/reduce conflict with basicType tuple
   | binOp = binOp; { BinExpr binOp }
   | uniOp = uniOp; { UnaryExpr uniOp }
-  | name = ID; { Var (name) }
+  | name = ID; { Var name }
   | name = ID; LPAREN; params = separated_list(COMMA, expression); RPAREN; { Call(name, params) }
-  | expr = expression; DOT; name = ID; { MemberCall(expr, name, []) }
-  | expr = expression; DOT; name = ID; LPAREN; params = separated_list(COMMA, expression); RPAREN; { MemberCall(expr, name, params) }
-  | value = baseType; { Literal (value) }
+  | expr = expression; DOT; name = ID; { MemberCall (expr, name, []) }
+  | expr = expression; DOT; name = ID; LPAREN; params = separated_list(COMMA, expression); RPAREN; { MemberCall (expr, name, params) }
+  | value = baseType; { Literal value }
 
 let binOp := 
   | var1 = expression; PLUS; var2 = expression; { Add (var1, var2) }
@@ -152,17 +150,22 @@ let uniOp :=
   | NOT; var = expression; { Not (var) }
 
 let baseType := 
-  | var = INT; { Int (var) } 
-  | var = FLOAT; { Float (var) } 
-  | var = STRING; { String (var) }
-  | var = CHAR; { Char (var) }
+  | var = INT; { Int var } 
+  | var = FLOAT; { Float var } 
+  | var = STRING; { String var }
+  | var = CHAR; { Char var }
   | LBRACKET; vars = separated_list(COMMA, expression); RBRACKET; { List vars } 
-  | LPAREN; vars = tuple; RPAREN; { Tuple vars }
-  | TRUE; { Bool (true) }
-  | FALSE; { Bool (false) }
+  | LPAREN; elem = expression?; COMMA; rest = tuple; { 
+    match elem with
+    | Some elem -> Tuple (elem :: rest)
+    | None -> Tuple rest 
+  }
+  | TRUE; { Bool true }
+  | FALSE; { Bool false }
 
 // This fixes the shift/reduce conflict with RPAREN, but I think the syntax changed a bit
-let tuple := 
-  | var1 = expression; COMMA ; { var1::[] }
-  | var1 = expression; COMMA; vars = tuple; { var1::vars }
-
+// TODO: Do we allow (,) as an empty tuple? Also, with this rule (,1,2) is also a valid tuple that is equivalent to (1,2) or (,1,2,) or (1,2,)
+let tuple :=
+  | RPAREN; { [] }
+  | elem = expression; RPAREN; { [elem] }
+  | elem = expression; COMMA; rest = tuple; { elem :: rest }
