@@ -1,14 +1,8 @@
 open Xmas
 
 let () =
-  let filename = Sys.argv.(1) in
-  let res = Driver.fast_parse filename in
-  let ast =
-    match res with
-    | Ok ast -> ast
-    | Error err -> (
-        match err with
-        | Lexer.LexicalError msg -> failwith msg
-        | _ -> Driver.parse filename)
+  let filename =
+    if Array.length Sys.argv > 1 then Some Sys.argv.(1) else None
   in
+  let ast = Driver.run ?filename () in
   print_endline (Ast.show ast)

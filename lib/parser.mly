@@ -96,15 +96,19 @@ let function_definition :=
 
 let if_statement :=
   | IF; expr = expression; scope = scope; { If (expr, scope) }
+  | IF; expr = expression; NEWLINE; scope = scope; { If (expr, scope) }
 
 let while_loop :=
   | WHILE ; expr = expression; scope = scope; { While (expr, scope) }
+  | WHILE ; expr = expression; NEWLINE; scope = scope; { While (expr, scope) }
 
 let for_loop :=
   | FOR ; name = ID; IN; expr = expression; scope = scope; { For (name, expr, scope) }
+  | FOR ; name = ID; IN; expr = expression; NEWLINE; scope = scope; { For (name, expr, scope) }
 
 let match_statement :=
   | MATCH; expr = expression; LBRACE; branches = match_branch+; RBRACE; { Match (expr, branches) } 
+  | MATCH; expr = expression; NEWLINE; branches = match_branch+; { Match (expr, branches) }
 
 let match_branch :=
   | BACKSLASH; value = expression; ARROW; statements = scope; { (value, statements) } 

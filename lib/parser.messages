@@ -47,6 +47,7 @@ program: WHILE WHILE
 ## Ends in an error in state: 5.
 ##
 ## while_loop -> WHILE . expression scope [ RBRACE NEWLINE EOF ]
+## while_loop -> WHILE . expression NEWLINE scope [ RBRACE NEWLINE EOF ]
 ##
 ## The known suffix of the stack is as follows:
 ## WHILE
@@ -141,6 +142,7 @@ program: MATCH WHILE
 ## Ends in an error in state: 15.
 ##
 ## match_statement -> MATCH . expression LBRACE nonempty_list(match_branch) RBRACE [ RBRACE NEWLINE EOF ]
+## match_statement -> MATCH . expression NEWLINE nonempty_list(match_branch) [ RBRACE NEWLINE EOF ]
 ##
 ## The known suffix of the stack is as follows:
 ## MATCH
@@ -881,24 +883,25 @@ program: MATCH CHAR RPAREN
 ##
 ## Ends in an error in state: 67.
 ##
-## binOp -> expression . PLUS expression [ TIMES PLUS OR NEQ MOD MINUS LT LEQ LBRACE GT GEQ EXP EQ DOT DIV AT AND ]
-## binOp -> expression . MINUS expression [ TIMES PLUS OR NEQ MOD MINUS LT LEQ LBRACE GT GEQ EXP EQ DOT DIV AT AND ]
-## binOp -> expression . TIMES expression [ TIMES PLUS OR NEQ MOD MINUS LT LEQ LBRACE GT GEQ EXP EQ DOT DIV AT AND ]
-## binOp -> expression . DIV expression [ TIMES PLUS OR NEQ MOD MINUS LT LEQ LBRACE GT GEQ EXP EQ DOT DIV AT AND ]
-## binOp -> expression . MOD expression [ TIMES PLUS OR NEQ MOD MINUS LT LEQ LBRACE GT GEQ EXP EQ DOT DIV AT AND ]
-## binOp -> expression . EXP expression [ TIMES PLUS OR NEQ MOD MINUS LT LEQ LBRACE GT GEQ EXP EQ DOT DIV AT AND ]
-## binOp -> expression . EQ expression [ TIMES PLUS OR NEQ MOD MINUS LT LEQ LBRACE GT GEQ EXP EQ DOT DIV AT AND ]
-## binOp -> expression . NEQ expression [ TIMES PLUS OR NEQ MOD MINUS LT LEQ LBRACE GT GEQ EXP EQ DOT DIV AT AND ]
-## binOp -> expression . LT expression [ TIMES PLUS OR NEQ MOD MINUS LT LEQ LBRACE GT GEQ EXP EQ DOT DIV AT AND ]
-## binOp -> expression . LEQ expression [ TIMES PLUS OR NEQ MOD MINUS LT LEQ LBRACE GT GEQ EXP EQ DOT DIV AT AND ]
-## binOp -> expression . GT expression [ TIMES PLUS OR NEQ MOD MINUS LT LEQ LBRACE GT GEQ EXP EQ DOT DIV AT AND ]
-## binOp -> expression . GEQ expression [ TIMES PLUS OR NEQ MOD MINUS LT LEQ LBRACE GT GEQ EXP EQ DOT DIV AT AND ]
-## binOp -> expression . AND expression [ TIMES PLUS OR NEQ MOD MINUS LT LEQ LBRACE GT GEQ EXP EQ DOT DIV AT AND ]
-## binOp -> expression . OR expression [ TIMES PLUS OR NEQ MOD MINUS LT LEQ LBRACE GT GEQ EXP EQ DOT DIV AT AND ]
-## expression -> expression . AT ID [ TIMES PLUS OR NEQ MOD MINUS LT LEQ LBRACE GT GEQ EXP EQ DOT DIV AT AND ]
-## expression -> expression . DOT ID [ TIMES PLUS OR NEQ MOD MINUS LT LEQ LBRACE GT GEQ EXP EQ DOT DIV AT AND ]
-## expression -> expression . DOT ID LPAREN loption(separated_nonempty_list(COMMA,expression)) RPAREN [ TIMES PLUS OR NEQ MOD MINUS LT LEQ LBRACE GT GEQ EXP EQ DOT DIV AT AND ]
+## binOp -> expression . PLUS expression [ TIMES PLUS OR NEWLINE NEQ MOD MINUS LT LEQ LBRACE GT GEQ EXP EQ DOT DIV AT AND ]
+## binOp -> expression . MINUS expression [ TIMES PLUS OR NEWLINE NEQ MOD MINUS LT LEQ LBRACE GT GEQ EXP EQ DOT DIV AT AND ]
+## binOp -> expression . TIMES expression [ TIMES PLUS OR NEWLINE NEQ MOD MINUS LT LEQ LBRACE GT GEQ EXP EQ DOT DIV AT AND ]
+## binOp -> expression . DIV expression [ TIMES PLUS OR NEWLINE NEQ MOD MINUS LT LEQ LBRACE GT GEQ EXP EQ DOT DIV AT AND ]
+## binOp -> expression . MOD expression [ TIMES PLUS OR NEWLINE NEQ MOD MINUS LT LEQ LBRACE GT GEQ EXP EQ DOT DIV AT AND ]
+## binOp -> expression . EXP expression [ TIMES PLUS OR NEWLINE NEQ MOD MINUS LT LEQ LBRACE GT GEQ EXP EQ DOT DIV AT AND ]
+## binOp -> expression . EQ expression [ TIMES PLUS OR NEWLINE NEQ MOD MINUS LT LEQ LBRACE GT GEQ EXP EQ DOT DIV AT AND ]
+## binOp -> expression . NEQ expression [ TIMES PLUS OR NEWLINE NEQ MOD MINUS LT LEQ LBRACE GT GEQ EXP EQ DOT DIV AT AND ]
+## binOp -> expression . LT expression [ TIMES PLUS OR NEWLINE NEQ MOD MINUS LT LEQ LBRACE GT GEQ EXP EQ DOT DIV AT AND ]
+## binOp -> expression . LEQ expression [ TIMES PLUS OR NEWLINE NEQ MOD MINUS LT LEQ LBRACE GT GEQ EXP EQ DOT DIV AT AND ]
+## binOp -> expression . GT expression [ TIMES PLUS OR NEWLINE NEQ MOD MINUS LT LEQ LBRACE GT GEQ EXP EQ DOT DIV AT AND ]
+## binOp -> expression . GEQ expression [ TIMES PLUS OR NEWLINE NEQ MOD MINUS LT LEQ LBRACE GT GEQ EXP EQ DOT DIV AT AND ]
+## binOp -> expression . AND expression [ TIMES PLUS OR NEWLINE NEQ MOD MINUS LT LEQ LBRACE GT GEQ EXP EQ DOT DIV AT AND ]
+## binOp -> expression . OR expression [ TIMES PLUS OR NEWLINE NEQ MOD MINUS LT LEQ LBRACE GT GEQ EXP EQ DOT DIV AT AND ]
+## expression -> expression . AT ID [ TIMES PLUS OR NEWLINE NEQ MOD MINUS LT LEQ LBRACE GT GEQ EXP EQ DOT DIV AT AND ]
+## expression -> expression . DOT ID [ TIMES PLUS OR NEWLINE NEQ MOD MINUS LT LEQ LBRACE GT GEQ EXP EQ DOT DIV AT AND ]
+## expression -> expression . DOT ID LPAREN loption(separated_nonempty_list(COMMA,expression)) RPAREN [ TIMES PLUS OR NEWLINE NEQ MOD MINUS LT LEQ LBRACE GT GEQ EXP EQ DOT DIV AT AND ]
 ## match_statement -> MATCH expression . LBRACE nonempty_list(match_branch) RBRACE [ RBRACE NEWLINE EOF ]
+## match_statement -> MATCH expression . NEWLINE nonempty_list(match_branch) [ RBRACE NEWLINE EOF ]
 ##
 ## The known suffix of the stack is as follows:
 ## MATCH expression
@@ -906,14 +909,14 @@ program: MATCH CHAR RPAREN
 
 <YOUR SYNTAX ERROR MESSAGE HERE>
 
-program: MATCH CHAR LBRACE WHILE
+program: MATCH CHAR NEWLINE WHILE
 ##
 ## Ends in an error in state: 68.
 ##
-## match_statement -> MATCH expression LBRACE . nonempty_list(match_branch) RBRACE [ RBRACE NEWLINE EOF ]
+## match_statement -> MATCH expression NEWLINE . nonempty_list(match_branch) [ RBRACE NEWLINE EOF ]
 ##
 ## The known suffix of the stack is as follows:
-## MATCH expression LBRACE
+## MATCH expression NEWLINE
 ##
 
 <YOUR SYNTAX ERROR MESSAGE HERE>
@@ -922,7 +925,7 @@ program: MATCH CHAR LBRACE BACKSLASH WHILE
 ##
 ## Ends in an error in state: 69.
 ##
-## match_branch -> BACKSLASH . expression ARROW scope [ RBRACE BACKSLASH ]
+## match_branch -> BACKSLASH . expression ARROW scope [ RBRACE NEWLINE EOF BACKSLASH ]
 ##
 ## The known suffix of the stack is as follows:
 ## BACKSLASH
@@ -951,7 +954,7 @@ program: MATCH CHAR LBRACE BACKSLASH CHAR RPAREN
 ## expression -> expression . AT ID [ TIMES PLUS OR NEQ MOD MINUS LT LEQ GT GEQ EXP EQ DOT DIV AT ARROW AND ]
 ## expression -> expression . DOT ID [ TIMES PLUS OR NEQ MOD MINUS LT LEQ GT GEQ EXP EQ DOT DIV AT ARROW AND ]
 ## expression -> expression . DOT ID LPAREN loption(separated_nonempty_list(COMMA,expression)) RPAREN [ TIMES PLUS OR NEQ MOD MINUS LT LEQ GT GEQ EXP EQ DOT DIV AT ARROW AND ]
-## match_branch -> BACKSLASH expression . ARROW scope [ RBRACE BACKSLASH ]
+## match_branch -> BACKSLASH expression . ARROW scope [ RBRACE NEWLINE EOF BACKSLASH ]
 ##
 ## The known suffix of the stack is as follows:
 ## BACKSLASH expression
@@ -963,7 +966,7 @@ program: MATCH CHAR LBRACE BACKSLASH CHAR ARROW WHILE
 ##
 ## Ends in an error in state: 71.
 ##
-## match_branch -> BACKSLASH expression ARROW . scope [ RBRACE BACKSLASH ]
+## match_branch -> BACKSLASH expression ARROW . scope [ RBRACE NEWLINE EOF BACKSLASH ]
 ##
 ## The known suffix of the stack is as follows:
 ## BACKSLASH expression ARROW
@@ -973,10 +976,10 @@ program: MATCH CHAR LBRACE BACKSLASH CHAR ARROW WHILE
 
 program: MATCH CHAR LBRACE BACKSLASH CHAR ARROW LBRACE RBRACE WHILE
 ##
-## Ends in an error in state: 75.
+## Ends in an error in state: 74.
 ##
-## nonempty_list(match_branch) -> match_branch . [ RBRACE ]
-## nonempty_list(match_branch) -> match_branch . nonempty_list(match_branch) [ RBRACE ]
+## nonempty_list(match_branch) -> match_branch . [ RBRACE NEWLINE EOF ]
+## nonempty_list(match_branch) -> match_branch . nonempty_list(match_branch) [ RBRACE NEWLINE EOF ]
 ##
 ## The known suffix of the stack is as follows:
 ## match_branch
@@ -984,11 +987,42 @@ program: MATCH CHAR LBRACE BACKSLASH CHAR ARROW LBRACE RBRACE WHILE
 
 <YOUR SYNTAX ERROR MESSAGE HERE>
 
-program: IF WHILE
+program: MATCH CHAR LBRACE WHILE
+##
+## Ends in an error in state: 76.
+##
+## match_statement -> MATCH expression LBRACE . nonempty_list(match_branch) RBRACE [ RBRACE NEWLINE EOF ]
+##
+## The known suffix of the stack is as follows:
+## MATCH expression LBRACE
+##
+
+<YOUR SYNTAX ERROR MESSAGE HERE>
+
+program: MATCH CHAR LBRACE BACKSLASH CHAR ARROW LBRACE RBRACE NEWLINE
 ##
 ## Ends in an error in state: 77.
 ##
+## match_statement -> MATCH expression LBRACE nonempty_list(match_branch) . RBRACE [ RBRACE NEWLINE EOF ]
+##
+## The known suffix of the stack is as follows:
+## MATCH expression LBRACE nonempty_list(match_branch)
+##
+## WARNING: This example involves spurious reductions.
+## This implies that, although the LR(1) items shown above provide an
+## accurate view of the past (what has been recognized so far), they
+## may provide an INCOMPLETE view of the future (what was expected next).
+## In state 74, spurious reduction of production nonempty_list(match_branch) -> match_branch
+##
+
+<YOUR SYNTAX ERROR MESSAGE HERE>
+
+program: IF WHILE
+##
+## Ends in an error in state: 79.
+##
 ## if_statement -> IF . expression scope [ RBRACE NEWLINE EOF ]
+## if_statement -> IF . expression NEWLINE scope [ RBRACE NEWLINE EOF ]
 ##
 ## The known suffix of the stack is as follows:
 ## IF
@@ -998,26 +1032,27 @@ program: IF WHILE
 
 program: IF CHAR RPAREN
 ##
-## Ends in an error in state: 78.
+## Ends in an error in state: 80.
 ##
-## binOp -> expression . PLUS expression [ TIMES PLUS OR NEQ MOD MINUS LT LEQ LBRACE GT GEQ EXP EQ DOT DIV AT AND ]
-## binOp -> expression . MINUS expression [ TIMES PLUS OR NEQ MOD MINUS LT LEQ LBRACE GT GEQ EXP EQ DOT DIV AT AND ]
-## binOp -> expression . TIMES expression [ TIMES PLUS OR NEQ MOD MINUS LT LEQ LBRACE GT GEQ EXP EQ DOT DIV AT AND ]
-## binOp -> expression . DIV expression [ TIMES PLUS OR NEQ MOD MINUS LT LEQ LBRACE GT GEQ EXP EQ DOT DIV AT AND ]
-## binOp -> expression . MOD expression [ TIMES PLUS OR NEQ MOD MINUS LT LEQ LBRACE GT GEQ EXP EQ DOT DIV AT AND ]
-## binOp -> expression . EXP expression [ TIMES PLUS OR NEQ MOD MINUS LT LEQ LBRACE GT GEQ EXP EQ DOT DIV AT AND ]
-## binOp -> expression . EQ expression [ TIMES PLUS OR NEQ MOD MINUS LT LEQ LBRACE GT GEQ EXP EQ DOT DIV AT AND ]
-## binOp -> expression . NEQ expression [ TIMES PLUS OR NEQ MOD MINUS LT LEQ LBRACE GT GEQ EXP EQ DOT DIV AT AND ]
-## binOp -> expression . LT expression [ TIMES PLUS OR NEQ MOD MINUS LT LEQ LBRACE GT GEQ EXP EQ DOT DIV AT AND ]
-## binOp -> expression . LEQ expression [ TIMES PLUS OR NEQ MOD MINUS LT LEQ LBRACE GT GEQ EXP EQ DOT DIV AT AND ]
-## binOp -> expression . GT expression [ TIMES PLUS OR NEQ MOD MINUS LT LEQ LBRACE GT GEQ EXP EQ DOT DIV AT AND ]
-## binOp -> expression . GEQ expression [ TIMES PLUS OR NEQ MOD MINUS LT LEQ LBRACE GT GEQ EXP EQ DOT DIV AT AND ]
-## binOp -> expression . AND expression [ TIMES PLUS OR NEQ MOD MINUS LT LEQ LBRACE GT GEQ EXP EQ DOT DIV AT AND ]
-## binOp -> expression . OR expression [ TIMES PLUS OR NEQ MOD MINUS LT LEQ LBRACE GT GEQ EXP EQ DOT DIV AT AND ]
-## expression -> expression . AT ID [ TIMES PLUS OR NEQ MOD MINUS LT LEQ LBRACE GT GEQ EXP EQ DOT DIV AT AND ]
-## expression -> expression . DOT ID [ TIMES PLUS OR NEQ MOD MINUS LT LEQ LBRACE GT GEQ EXP EQ DOT DIV AT AND ]
-## expression -> expression . DOT ID LPAREN loption(separated_nonempty_list(COMMA,expression)) RPAREN [ TIMES PLUS OR NEQ MOD MINUS LT LEQ LBRACE GT GEQ EXP EQ DOT DIV AT AND ]
+## binOp -> expression . PLUS expression [ TIMES PLUS OR NEWLINE NEQ MOD MINUS LT LEQ LBRACE GT GEQ EXP EQ DOT DIV AT AND ]
+## binOp -> expression . MINUS expression [ TIMES PLUS OR NEWLINE NEQ MOD MINUS LT LEQ LBRACE GT GEQ EXP EQ DOT DIV AT AND ]
+## binOp -> expression . TIMES expression [ TIMES PLUS OR NEWLINE NEQ MOD MINUS LT LEQ LBRACE GT GEQ EXP EQ DOT DIV AT AND ]
+## binOp -> expression . DIV expression [ TIMES PLUS OR NEWLINE NEQ MOD MINUS LT LEQ LBRACE GT GEQ EXP EQ DOT DIV AT AND ]
+## binOp -> expression . MOD expression [ TIMES PLUS OR NEWLINE NEQ MOD MINUS LT LEQ LBRACE GT GEQ EXP EQ DOT DIV AT AND ]
+## binOp -> expression . EXP expression [ TIMES PLUS OR NEWLINE NEQ MOD MINUS LT LEQ LBRACE GT GEQ EXP EQ DOT DIV AT AND ]
+## binOp -> expression . EQ expression [ TIMES PLUS OR NEWLINE NEQ MOD MINUS LT LEQ LBRACE GT GEQ EXP EQ DOT DIV AT AND ]
+## binOp -> expression . NEQ expression [ TIMES PLUS OR NEWLINE NEQ MOD MINUS LT LEQ LBRACE GT GEQ EXP EQ DOT DIV AT AND ]
+## binOp -> expression . LT expression [ TIMES PLUS OR NEWLINE NEQ MOD MINUS LT LEQ LBRACE GT GEQ EXP EQ DOT DIV AT AND ]
+## binOp -> expression . LEQ expression [ TIMES PLUS OR NEWLINE NEQ MOD MINUS LT LEQ LBRACE GT GEQ EXP EQ DOT DIV AT AND ]
+## binOp -> expression . GT expression [ TIMES PLUS OR NEWLINE NEQ MOD MINUS LT LEQ LBRACE GT GEQ EXP EQ DOT DIV AT AND ]
+## binOp -> expression . GEQ expression [ TIMES PLUS OR NEWLINE NEQ MOD MINUS LT LEQ LBRACE GT GEQ EXP EQ DOT DIV AT AND ]
+## binOp -> expression . AND expression [ TIMES PLUS OR NEWLINE NEQ MOD MINUS LT LEQ LBRACE GT GEQ EXP EQ DOT DIV AT AND ]
+## binOp -> expression . OR expression [ TIMES PLUS OR NEWLINE NEQ MOD MINUS LT LEQ LBRACE GT GEQ EXP EQ DOT DIV AT AND ]
+## expression -> expression . AT ID [ TIMES PLUS OR NEWLINE NEQ MOD MINUS LT LEQ LBRACE GT GEQ EXP EQ DOT DIV AT AND ]
+## expression -> expression . DOT ID [ TIMES PLUS OR NEWLINE NEQ MOD MINUS LT LEQ LBRACE GT GEQ EXP EQ DOT DIV AT AND ]
+## expression -> expression . DOT ID LPAREN loption(separated_nonempty_list(COMMA,expression)) RPAREN [ TIMES PLUS OR NEWLINE NEQ MOD MINUS LT LEQ LBRACE GT GEQ EXP EQ DOT DIV AT AND ]
 ## if_statement -> IF expression . scope [ RBRACE NEWLINE EOF ]
+## if_statement -> IF expression . NEWLINE scope [ RBRACE NEWLINE EOF ]
 ##
 ## The known suffix of the stack is as follows:
 ## IF expression
@@ -1025,9 +1060,21 @@ program: IF CHAR RPAREN
 
 <YOUR SYNTAX ERROR MESSAGE HERE>
 
+program: IF CHAR NEWLINE WHILE
+##
+## Ends in an error in state: 81.
+##
+## if_statement -> IF expression NEWLINE . scope [ RBRACE NEWLINE EOF ]
+##
+## The known suffix of the stack is as follows:
+## IF expression NEWLINE
+##
+
+<YOUR SYNTAX ERROR MESSAGE HERE>
+
 program: ID WHILE
 ##
-## Ends in an error in state: 80.
+## Ends in an error in state: 84.
 ##
 ## expression -> ID . [ TIMES RBRACE PLUS OR NEWLINE NEQ MOD MINUS LT LEQ GT GEQ EXP EQ EOF DOT DIV AT AND ]
 ## expression -> ID . LPAREN loption(separated_nonempty_list(COMMA,expression)) RPAREN [ TIMES RBRACE PLUS OR NEWLINE NEQ MOD MINUS LT LEQ GT GEQ EXP EQ EOF DOT DIV AT AND ]
@@ -1042,7 +1089,7 @@ program: ID WHILE
 
 program: ID EQUALS WHILE
 ##
-## Ends in an error in state: 81.
+## Ends in an error in state: 85.
 ##
 ## variable_assignment -> ID EQUALS . expression [ RBRACE NEWLINE EOF ]
 ##
@@ -1054,7 +1101,7 @@ program: ID EQUALS WHILE
 
 program: ID EQUALS CHAR RPAREN
 ##
-## Ends in an error in state: 82.
+## Ends in an error in state: 86.
 ##
 ## binOp -> expression . PLUS expression [ TIMES RBRACE PLUS OR NEWLINE NEQ MOD MINUS LT LEQ GT GEQ EXP EQ EOF DOT DIV AT AND ]
 ## binOp -> expression . MINUS expression [ TIMES RBRACE PLUS OR NEWLINE NEQ MOD MINUS LT LEQ GT GEQ EXP EQ EOF DOT DIV AT AND ]
@@ -1083,7 +1130,7 @@ program: ID EQUALS CHAR RPAREN
 
 program: ID BACKSLASH WHILE
 ##
-## Ends in an error in state: 83.
+## Ends in an error in state: 87.
 ##
 ## function_definition -> ID BACKSLASH . list(ID) ARROW scope [ RBRACE NEWLINE EOF ]
 ##
@@ -1095,7 +1142,7 @@ program: ID BACKSLASH WHILE
 
 program: ID BACKSLASH ID WHILE
 ##
-## Ends in an error in state: 84.
+## Ends in an error in state: 88.
 ##
 ## list(ID) -> ID . list(ID) [ ARROW ]
 ##
@@ -1107,7 +1154,7 @@ program: ID BACKSLASH ID WHILE
 
 program: ID BACKSLASH ARROW WHILE
 ##
-## Ends in an error in state: 87.
+## Ends in an error in state: 91.
 ##
 ## function_definition -> ID BACKSLASH list(ID) ARROW . scope [ RBRACE NEWLINE EOF ]
 ##
@@ -1119,9 +1166,10 @@ program: ID BACKSLASH ARROW WHILE
 
 program: FOR WHILE
 ##
-## Ends in an error in state: 89.
+## Ends in an error in state: 93.
 ##
 ## for_loop -> FOR . ID IN expression scope [ RBRACE NEWLINE EOF ]
+## for_loop -> FOR . ID IN expression NEWLINE scope [ RBRACE NEWLINE EOF ]
 ##
 ## The known suffix of the stack is as follows:
 ## FOR
@@ -1131,9 +1179,10 @@ program: FOR WHILE
 
 program: FOR ID WHILE
 ##
-## Ends in an error in state: 90.
+## Ends in an error in state: 94.
 ##
 ## for_loop -> FOR ID . IN expression scope [ RBRACE NEWLINE EOF ]
+## for_loop -> FOR ID . IN expression NEWLINE scope [ RBRACE NEWLINE EOF ]
 ##
 ## The known suffix of the stack is as follows:
 ## FOR ID
@@ -1143,9 +1192,10 @@ program: FOR ID WHILE
 
 program: FOR ID IN WHILE
 ##
-## Ends in an error in state: 91.
+## Ends in an error in state: 95.
 ##
 ## for_loop -> FOR ID IN . expression scope [ RBRACE NEWLINE EOF ]
+## for_loop -> FOR ID IN . expression NEWLINE scope [ RBRACE NEWLINE EOF ]
 ##
 ## The known suffix of the stack is as follows:
 ## FOR ID IN
@@ -1155,26 +1205,27 @@ program: FOR ID IN WHILE
 
 program: FOR ID IN CHAR RPAREN
 ##
-## Ends in an error in state: 92.
+## Ends in an error in state: 96.
 ##
-## binOp -> expression . PLUS expression [ TIMES PLUS OR NEQ MOD MINUS LT LEQ LBRACE GT GEQ EXP EQ DOT DIV AT AND ]
-## binOp -> expression . MINUS expression [ TIMES PLUS OR NEQ MOD MINUS LT LEQ LBRACE GT GEQ EXP EQ DOT DIV AT AND ]
-## binOp -> expression . TIMES expression [ TIMES PLUS OR NEQ MOD MINUS LT LEQ LBRACE GT GEQ EXP EQ DOT DIV AT AND ]
-## binOp -> expression . DIV expression [ TIMES PLUS OR NEQ MOD MINUS LT LEQ LBRACE GT GEQ EXP EQ DOT DIV AT AND ]
-## binOp -> expression . MOD expression [ TIMES PLUS OR NEQ MOD MINUS LT LEQ LBRACE GT GEQ EXP EQ DOT DIV AT AND ]
-## binOp -> expression . EXP expression [ TIMES PLUS OR NEQ MOD MINUS LT LEQ LBRACE GT GEQ EXP EQ DOT DIV AT AND ]
-## binOp -> expression . EQ expression [ TIMES PLUS OR NEQ MOD MINUS LT LEQ LBRACE GT GEQ EXP EQ DOT DIV AT AND ]
-## binOp -> expression . NEQ expression [ TIMES PLUS OR NEQ MOD MINUS LT LEQ LBRACE GT GEQ EXP EQ DOT DIV AT AND ]
-## binOp -> expression . LT expression [ TIMES PLUS OR NEQ MOD MINUS LT LEQ LBRACE GT GEQ EXP EQ DOT DIV AT AND ]
-## binOp -> expression . LEQ expression [ TIMES PLUS OR NEQ MOD MINUS LT LEQ LBRACE GT GEQ EXP EQ DOT DIV AT AND ]
-## binOp -> expression . GT expression [ TIMES PLUS OR NEQ MOD MINUS LT LEQ LBRACE GT GEQ EXP EQ DOT DIV AT AND ]
-## binOp -> expression . GEQ expression [ TIMES PLUS OR NEQ MOD MINUS LT LEQ LBRACE GT GEQ EXP EQ DOT DIV AT AND ]
-## binOp -> expression . AND expression [ TIMES PLUS OR NEQ MOD MINUS LT LEQ LBRACE GT GEQ EXP EQ DOT DIV AT AND ]
-## binOp -> expression . OR expression [ TIMES PLUS OR NEQ MOD MINUS LT LEQ LBRACE GT GEQ EXP EQ DOT DIV AT AND ]
-## expression -> expression . AT ID [ TIMES PLUS OR NEQ MOD MINUS LT LEQ LBRACE GT GEQ EXP EQ DOT DIV AT AND ]
-## expression -> expression . DOT ID [ TIMES PLUS OR NEQ MOD MINUS LT LEQ LBRACE GT GEQ EXP EQ DOT DIV AT AND ]
-## expression -> expression . DOT ID LPAREN loption(separated_nonempty_list(COMMA,expression)) RPAREN [ TIMES PLUS OR NEQ MOD MINUS LT LEQ LBRACE GT GEQ EXP EQ DOT DIV AT AND ]
+## binOp -> expression . PLUS expression [ TIMES PLUS OR NEWLINE NEQ MOD MINUS LT LEQ LBRACE GT GEQ EXP EQ DOT DIV AT AND ]
+## binOp -> expression . MINUS expression [ TIMES PLUS OR NEWLINE NEQ MOD MINUS LT LEQ LBRACE GT GEQ EXP EQ DOT DIV AT AND ]
+## binOp -> expression . TIMES expression [ TIMES PLUS OR NEWLINE NEQ MOD MINUS LT LEQ LBRACE GT GEQ EXP EQ DOT DIV AT AND ]
+## binOp -> expression . DIV expression [ TIMES PLUS OR NEWLINE NEQ MOD MINUS LT LEQ LBRACE GT GEQ EXP EQ DOT DIV AT AND ]
+## binOp -> expression . MOD expression [ TIMES PLUS OR NEWLINE NEQ MOD MINUS LT LEQ LBRACE GT GEQ EXP EQ DOT DIV AT AND ]
+## binOp -> expression . EXP expression [ TIMES PLUS OR NEWLINE NEQ MOD MINUS LT LEQ LBRACE GT GEQ EXP EQ DOT DIV AT AND ]
+## binOp -> expression . EQ expression [ TIMES PLUS OR NEWLINE NEQ MOD MINUS LT LEQ LBRACE GT GEQ EXP EQ DOT DIV AT AND ]
+## binOp -> expression . NEQ expression [ TIMES PLUS OR NEWLINE NEQ MOD MINUS LT LEQ LBRACE GT GEQ EXP EQ DOT DIV AT AND ]
+## binOp -> expression . LT expression [ TIMES PLUS OR NEWLINE NEQ MOD MINUS LT LEQ LBRACE GT GEQ EXP EQ DOT DIV AT AND ]
+## binOp -> expression . LEQ expression [ TIMES PLUS OR NEWLINE NEQ MOD MINUS LT LEQ LBRACE GT GEQ EXP EQ DOT DIV AT AND ]
+## binOp -> expression . GT expression [ TIMES PLUS OR NEWLINE NEQ MOD MINUS LT LEQ LBRACE GT GEQ EXP EQ DOT DIV AT AND ]
+## binOp -> expression . GEQ expression [ TIMES PLUS OR NEWLINE NEQ MOD MINUS LT LEQ LBRACE GT GEQ EXP EQ DOT DIV AT AND ]
+## binOp -> expression . AND expression [ TIMES PLUS OR NEWLINE NEQ MOD MINUS LT LEQ LBRACE GT GEQ EXP EQ DOT DIV AT AND ]
+## binOp -> expression . OR expression [ TIMES PLUS OR NEWLINE NEQ MOD MINUS LT LEQ LBRACE GT GEQ EXP EQ DOT DIV AT AND ]
+## expression -> expression . AT ID [ TIMES PLUS OR NEWLINE NEQ MOD MINUS LT LEQ LBRACE GT GEQ EXP EQ DOT DIV AT AND ]
+## expression -> expression . DOT ID [ TIMES PLUS OR NEWLINE NEQ MOD MINUS LT LEQ LBRACE GT GEQ EXP EQ DOT DIV AT AND ]
+## expression -> expression . DOT ID LPAREN loption(separated_nonempty_list(COMMA,expression)) RPAREN [ TIMES PLUS OR NEWLINE NEQ MOD MINUS LT LEQ LBRACE GT GEQ EXP EQ DOT DIV AT AND ]
 ## for_loop -> FOR ID IN expression . scope [ RBRACE NEWLINE EOF ]
+## for_loop -> FOR ID IN expression . NEWLINE scope [ RBRACE NEWLINE EOF ]
 ##
 ## The known suffix of the stack is as follows:
 ## FOR ID IN expression
@@ -1182,9 +1233,21 @@ program: FOR ID IN CHAR RPAREN
 
 <YOUR SYNTAX ERROR MESSAGE HERE>
 
+program: FOR ID IN CHAR NEWLINE WHILE
+##
+## Ends in an error in state: 97.
+##
+## for_loop -> FOR ID IN expression NEWLINE . scope [ RBRACE NEWLINE EOF ]
+##
+## The known suffix of the stack is as follows:
+## FOR ID IN expression NEWLINE
+##
+
+<YOUR SYNTAX ERROR MESSAGE HERE>
+
 program: LBRACE ID NEWLINE EOF
 ##
-## Ends in an error in state: 96.
+## Ends in an error in state: 102.
 ##
 ## scope -> LBRACE list(NEWLINE) statement_list_scope . RBRACE [ TIMES RPAREN RBRACKET RBRACE PLUS OR NEWLINE NEQ MOD MINUS LT LEQ LBRACE GT GEQ EXP EQ EOF DOT DIV COMMA BACKSLASH AT ARROW AND ]
 ##
@@ -1195,16 +1258,16 @@ program: LBRACE ID NEWLINE EOF
 ## This implies that, although the LR(1) items shown above provide an
 ## accurate view of the past (what has been recognized so far), they
 ## may provide an INCOMPLETE view of the future (what was expected next).
-## In state 99, spurious reduction of production list(NEWLINE) ->
+## In state 105, spurious reduction of production list(NEWLINE) ->
 ## In state 2, spurious reduction of production list(NEWLINE) -> NEWLINE list(NEWLINE)
-## In state 108, spurious reduction of production statement_list_scope -> statement list(NEWLINE)
+## In state 114, spurious reduction of production statement_list_scope -> statement list(NEWLINE)
 ##
 
 <YOUR SYNTAX ERROR MESSAGE HERE>
 
 program: LBRACE ID EOF
 ##
-## Ends in an error in state: 98.
+## Ends in an error in state: 104.
 ##
 ## statement_list_scope -> statement . list(NEWLINE) [ RBRACE ]
 ## statement_list_scope -> statement . nonempty_list(NEWLINE) statement_list_scope [ RBRACE ]
@@ -1216,15 +1279,15 @@ program: LBRACE ID EOF
 ## This implies that, although the LR(1) items shown above provide an
 ## accurate view of the past (what has been recognized so far), they
 ## may provide an INCOMPLETE view of the future (what was expected next).
-## In state 80, spurious reduction of production expression -> ID
-## In state 107, spurious reduction of production statement -> expression
+## In state 84, spurious reduction of production expression -> ID
+## In state 113, spurious reduction of production statement -> expression
 ##
 
 <YOUR SYNTAX ERROR MESSAGE HERE>
 
 program: ID NEWLINE TIMES
 ##
-## Ends in an error in state: 99.
+## Ends in an error in state: 105.
 ##
 ## list(NEWLINE) -> NEWLINE . list(NEWLINE) [ RBRACE EOF ]
 ## nonempty_list(NEWLINE) -> NEWLINE . [ WHILE TRUE STRING NOT MINUS MATCH LPAREN LBRACKET LBRACE INT IF ID FOR FLOAT FALSE CHAR ]
@@ -1238,7 +1301,7 @@ program: ID NEWLINE TIMES
 
 program: CHAR RPAREN
 ##
-## Ends in an error in state: 107.
+## Ends in an error in state: 113.
 ##
 ## binOp -> expression . PLUS expression [ TIMES RBRACE PLUS OR NEWLINE NEQ MOD MINUS LT LEQ GT GEQ EXP EQ EOF DOT DIV AT AND ]
 ## binOp -> expression . MINUS expression [ TIMES RBRACE PLUS OR NEWLINE NEQ MOD MINUS LT LEQ GT GEQ EXP EQ EOF DOT DIV AT AND ]
@@ -1267,7 +1330,7 @@ program: CHAR RPAREN
 
 program: LBRACKET CHAR RPAREN
 ##
-## Ends in an error in state: 109.
+## Ends in an error in state: 115.
 ##
 ## baseType -> LBRACKET loption(separated_nonempty_list(COMMA,expression)) . RBRACKET [ TIMES RPAREN RBRACKET RBRACE PLUS OR NEWLINE NEQ MOD MINUS LT LEQ LBRACE GT GEQ EXP EQ EOF DOT DIV COMMA AT ARROW AND ]
 ##
@@ -1286,7 +1349,7 @@ program: LBRACKET CHAR RPAREN
 
 program: LPAREN COMMA WHILE
 ##
-## Ends in an error in state: 112.
+## Ends in an error in state: 118.
 ##
 ## baseType -> LPAREN option(expression) COMMA . tuple [ TIMES RPAREN RBRACKET RBRACE PLUS OR NEWLINE NEQ MOD MINUS LT LEQ LBRACE GT GEQ EXP EQ EOF DOT DIV COMMA AT ARROW AND ]
 ##
@@ -1298,7 +1361,7 @@ program: LPAREN COMMA WHILE
 
 program: LPAREN COMMA CHAR RBRACKET
 ##
-## Ends in an error in state: 115.
+## Ends in an error in state: 121.
 ##
 ## binOp -> expression . PLUS expression [ TIMES RPAREN PLUS OR NEQ MOD MINUS LT LEQ GT GEQ EXP EQ DOT DIV COMMA AT AND ]
 ## binOp -> expression . MINUS expression [ TIMES RPAREN PLUS OR NEQ MOD MINUS LT LEQ GT GEQ EXP EQ DOT DIV COMMA AT AND ]
@@ -1328,7 +1391,7 @@ program: LPAREN COMMA CHAR RBRACKET
 
 program: LPAREN COMMA CHAR COMMA WHILE
 ##
-## Ends in an error in state: 117.
+## Ends in an error in state: 123.
 ##
 ## tuple -> expression COMMA . tuple [ TIMES RPAREN RBRACKET RBRACE PLUS OR NEWLINE NEQ MOD MINUS LT LEQ LBRACE GT GEQ EXP EQ EOF DOT DIV COMMA AT ARROW AND ]
 ##
@@ -1340,7 +1403,7 @@ program: LPAREN COMMA CHAR COMMA WHILE
 
 program: LPAREN CHAR RBRACKET
 ##
-## Ends in an error in state: 119.
+## Ends in an error in state: 125.
 ##
 ## binOp -> expression . PLUS expression [ TIMES RPAREN PLUS OR NEQ MOD MINUS LT LEQ GT GEQ EXP EQ DOT DIV COMMA AT AND ]
 ## binOp -> expression . MINUS expression [ TIMES RPAREN PLUS OR NEQ MOD MINUS LT LEQ GT GEQ EXP EQ DOT DIV COMMA AT AND ]
@@ -1370,7 +1433,7 @@ program: LPAREN CHAR RBRACKET
 
 program: MINUS CHAR WHILE
 ##
-## Ends in an error in state: 121.
+## Ends in an error in state: 127.
 ##
 ## binOp -> expression . PLUS expression [ TIMES RPAREN RBRACKET RBRACE PLUS OR NEWLINE NEQ MOD MINUS LT LEQ LBRACE GT GEQ EXP EQ EOF DOT DIV COMMA AT ARROW AND ]
 ## binOp -> expression . MINUS expression [ TIMES RPAREN RBRACKET RBRACE PLUS OR NEWLINE NEQ MOD MINUS LT LEQ LBRACE GT GEQ EXP EQ EOF DOT DIV COMMA AT ARROW AND ]
@@ -1399,7 +1462,7 @@ program: MINUS CHAR WHILE
 
 program: NOT CHAR WHILE
 ##
-## Ends in an error in state: 122.
+## Ends in an error in state: 128.
 ##
 ## binOp -> expression . PLUS expression [ TIMES RPAREN RBRACKET RBRACE PLUS OR NEWLINE NEQ MOD MINUS LT LEQ LBRACE GT GEQ EXP EQ EOF DOT DIV COMMA AT ARROW AND ]
 ## binOp -> expression . MINUS expression [ TIMES RPAREN RBRACKET RBRACE PLUS OR NEWLINE NEQ MOD MINUS LT LEQ LBRACE GT GEQ EXP EQ EOF DOT DIV COMMA AT ARROW AND ]
@@ -1428,26 +1491,27 @@ program: NOT CHAR WHILE
 
 program: WHILE CHAR RPAREN
 ##
-## Ends in an error in state: 123.
+## Ends in an error in state: 129.
 ##
-## binOp -> expression . PLUS expression [ TIMES PLUS OR NEQ MOD MINUS LT LEQ LBRACE GT GEQ EXP EQ DOT DIV AT AND ]
-## binOp -> expression . MINUS expression [ TIMES PLUS OR NEQ MOD MINUS LT LEQ LBRACE GT GEQ EXP EQ DOT DIV AT AND ]
-## binOp -> expression . TIMES expression [ TIMES PLUS OR NEQ MOD MINUS LT LEQ LBRACE GT GEQ EXP EQ DOT DIV AT AND ]
-## binOp -> expression . DIV expression [ TIMES PLUS OR NEQ MOD MINUS LT LEQ LBRACE GT GEQ EXP EQ DOT DIV AT AND ]
-## binOp -> expression . MOD expression [ TIMES PLUS OR NEQ MOD MINUS LT LEQ LBRACE GT GEQ EXP EQ DOT DIV AT AND ]
-## binOp -> expression . EXP expression [ TIMES PLUS OR NEQ MOD MINUS LT LEQ LBRACE GT GEQ EXP EQ DOT DIV AT AND ]
-## binOp -> expression . EQ expression [ TIMES PLUS OR NEQ MOD MINUS LT LEQ LBRACE GT GEQ EXP EQ DOT DIV AT AND ]
-## binOp -> expression . NEQ expression [ TIMES PLUS OR NEQ MOD MINUS LT LEQ LBRACE GT GEQ EXP EQ DOT DIV AT AND ]
-## binOp -> expression . LT expression [ TIMES PLUS OR NEQ MOD MINUS LT LEQ LBRACE GT GEQ EXP EQ DOT DIV AT AND ]
-## binOp -> expression . LEQ expression [ TIMES PLUS OR NEQ MOD MINUS LT LEQ LBRACE GT GEQ EXP EQ DOT DIV AT AND ]
-## binOp -> expression . GT expression [ TIMES PLUS OR NEQ MOD MINUS LT LEQ LBRACE GT GEQ EXP EQ DOT DIV AT AND ]
-## binOp -> expression . GEQ expression [ TIMES PLUS OR NEQ MOD MINUS LT LEQ LBRACE GT GEQ EXP EQ DOT DIV AT AND ]
-## binOp -> expression . AND expression [ TIMES PLUS OR NEQ MOD MINUS LT LEQ LBRACE GT GEQ EXP EQ DOT DIV AT AND ]
-## binOp -> expression . OR expression [ TIMES PLUS OR NEQ MOD MINUS LT LEQ LBRACE GT GEQ EXP EQ DOT DIV AT AND ]
-## expression -> expression . AT ID [ TIMES PLUS OR NEQ MOD MINUS LT LEQ LBRACE GT GEQ EXP EQ DOT DIV AT AND ]
-## expression -> expression . DOT ID [ TIMES PLUS OR NEQ MOD MINUS LT LEQ LBRACE GT GEQ EXP EQ DOT DIV AT AND ]
-## expression -> expression . DOT ID LPAREN loption(separated_nonempty_list(COMMA,expression)) RPAREN [ TIMES PLUS OR NEQ MOD MINUS LT LEQ LBRACE GT GEQ EXP EQ DOT DIV AT AND ]
+## binOp -> expression . PLUS expression [ TIMES PLUS OR NEWLINE NEQ MOD MINUS LT LEQ LBRACE GT GEQ EXP EQ DOT DIV AT AND ]
+## binOp -> expression . MINUS expression [ TIMES PLUS OR NEWLINE NEQ MOD MINUS LT LEQ LBRACE GT GEQ EXP EQ DOT DIV AT AND ]
+## binOp -> expression . TIMES expression [ TIMES PLUS OR NEWLINE NEQ MOD MINUS LT LEQ LBRACE GT GEQ EXP EQ DOT DIV AT AND ]
+## binOp -> expression . DIV expression [ TIMES PLUS OR NEWLINE NEQ MOD MINUS LT LEQ LBRACE GT GEQ EXP EQ DOT DIV AT AND ]
+## binOp -> expression . MOD expression [ TIMES PLUS OR NEWLINE NEQ MOD MINUS LT LEQ LBRACE GT GEQ EXP EQ DOT DIV AT AND ]
+## binOp -> expression . EXP expression [ TIMES PLUS OR NEWLINE NEQ MOD MINUS LT LEQ LBRACE GT GEQ EXP EQ DOT DIV AT AND ]
+## binOp -> expression . EQ expression [ TIMES PLUS OR NEWLINE NEQ MOD MINUS LT LEQ LBRACE GT GEQ EXP EQ DOT DIV AT AND ]
+## binOp -> expression . NEQ expression [ TIMES PLUS OR NEWLINE NEQ MOD MINUS LT LEQ LBRACE GT GEQ EXP EQ DOT DIV AT AND ]
+## binOp -> expression . LT expression [ TIMES PLUS OR NEWLINE NEQ MOD MINUS LT LEQ LBRACE GT GEQ EXP EQ DOT DIV AT AND ]
+## binOp -> expression . LEQ expression [ TIMES PLUS OR NEWLINE NEQ MOD MINUS LT LEQ LBRACE GT GEQ EXP EQ DOT DIV AT AND ]
+## binOp -> expression . GT expression [ TIMES PLUS OR NEWLINE NEQ MOD MINUS LT LEQ LBRACE GT GEQ EXP EQ DOT DIV AT AND ]
+## binOp -> expression . GEQ expression [ TIMES PLUS OR NEWLINE NEQ MOD MINUS LT LEQ LBRACE GT GEQ EXP EQ DOT DIV AT AND ]
+## binOp -> expression . AND expression [ TIMES PLUS OR NEWLINE NEQ MOD MINUS LT LEQ LBRACE GT GEQ EXP EQ DOT DIV AT AND ]
+## binOp -> expression . OR expression [ TIMES PLUS OR NEWLINE NEQ MOD MINUS LT LEQ LBRACE GT GEQ EXP EQ DOT DIV AT AND ]
+## expression -> expression . AT ID [ TIMES PLUS OR NEWLINE NEQ MOD MINUS LT LEQ LBRACE GT GEQ EXP EQ DOT DIV AT AND ]
+## expression -> expression . DOT ID [ TIMES PLUS OR NEWLINE NEQ MOD MINUS LT LEQ LBRACE GT GEQ EXP EQ DOT DIV AT AND ]
+## expression -> expression . DOT ID LPAREN loption(separated_nonempty_list(COMMA,expression)) RPAREN [ TIMES PLUS OR NEWLINE NEQ MOD MINUS LT LEQ LBRACE GT GEQ EXP EQ DOT DIV AT AND ]
 ## while_loop -> WHILE expression . scope [ RBRACE NEWLINE EOF ]
+## while_loop -> WHILE expression . NEWLINE scope [ RBRACE NEWLINE EOF ]
 ##
 ## The known suffix of the stack is as follows:
 ## WHILE expression
@@ -1455,9 +1519,21 @@ program: WHILE CHAR RPAREN
 
 <YOUR SYNTAX ERROR MESSAGE HERE>
 
+program: WHILE CHAR NEWLINE WHILE
+##
+## Ends in an error in state: 130.
+##
+## while_loop -> WHILE expression NEWLINE . scope [ RBRACE NEWLINE EOF ]
+##
+## The known suffix of the stack is as follows:
+## WHILE expression NEWLINE
+##
+
+<YOUR SYNTAX ERROR MESSAGE HERE>
+
 program: ID NEWLINE RBRACE
 ##
-## Ends in an error in state: 126.
+## Ends in an error in state: 134.
 ##
 ## program -> list(NEWLINE) statement_list_eof . EOF [ # ]
 ##
@@ -1468,16 +1544,16 @@ program: ID NEWLINE RBRACE
 ## This implies that, although the LR(1) items shown above provide an
 ## accurate view of the past (what has been recognized so far), they
 ## may provide an INCOMPLETE view of the future (what was expected next).
-## In state 99, spurious reduction of production list(NEWLINE) ->
+## In state 105, spurious reduction of production list(NEWLINE) ->
 ## In state 2, spurious reduction of production list(NEWLINE) -> NEWLINE list(NEWLINE)
-## In state 131, spurious reduction of production statement_list_eof -> statement list(NEWLINE)
+## In state 139, spurious reduction of production statement_list_eof -> statement list(NEWLINE)
 ##
 
 <YOUR SYNTAX ERROR MESSAGE HERE>
 
 program: ID RBRACE
 ##
-## Ends in an error in state: 128.
+## Ends in an error in state: 136.
 ##
 ## statement_list_eof -> statement . list(NEWLINE) [ EOF ]
 ## statement_list_eof -> statement . nonempty_list(NEWLINE) statement_list_eof [ EOF ]
@@ -1489,8 +1565,8 @@ program: ID RBRACE
 ## This implies that, although the LR(1) items shown above provide an
 ## accurate view of the past (what has been recognized so far), they
 ## may provide an INCOMPLETE view of the future (what was expected next).
-## In state 80, spurious reduction of production expression -> ID
-## In state 107, spurious reduction of production statement -> expression
+## In state 84, spurious reduction of production expression -> ID
+## In state 113, spurious reduction of production statement -> expression
 ##
 
 <YOUR SYNTAX ERROR MESSAGE HERE>
