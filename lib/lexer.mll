@@ -53,7 +53,7 @@ let backslash_escapes = ['\\' '\'' '"' 'n' 't' 'b' 'r' ' ']
 rule read = parse
   | whitespace { read lexbuf }
   | comment { read lexbuf }
-  | newline { NEWLINE }
+  | newline { Lexing.new_line lexbuf; NEWLINE }
   | int { INT (int_of_string (Lexing.lexeme lexbuf)) }
   | float { FLOAT (float_of_string (Lexing.lexeme lexbuf)) }
   | id as word { 
