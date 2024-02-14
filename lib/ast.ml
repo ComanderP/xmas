@@ -1,32 +1,4 @@
-type 'a unaryOp = Neg of 'a | Not of 'a
-[@@deriving show { with_path = false }]
-
-type 'a binOp =
-  | Add of 'a * 'a
-  | Sub of 'a * 'a
-  | Mul of 'a * 'a
-  | Div of 'a * 'a
-  | Mod of 'a * 'a
-  | Exp of 'a * 'a
-  | Eq of 'a * 'a
-  | Neq of 'a * 'a
-  | Lt of 'a * 'a
-  | Le of 'a * 'a
-  | Gt of 'a * 'a
-  | Ge of 'a * 'a
-  | And of 'a * 'a
-  | Or of 'a * 'a
-[@@deriving show { with_path = false }]
-
-type baseType =
-  | Int of int
-  | Bool of bool
-  | Float of float
-  | String of string
-  | Char of char
-  | List of expression list
-  | Tuple of expression list
-  | Unit
+type t = Program of statement list
 
 and statement =
   | FunDef of string * string list * scope
@@ -42,12 +14,38 @@ and scope = statement list
 and expression =
   | Scope of scope
   | Bind of string * expression
-  | BinExpr of expression binOp
-  | UnaryExpr of expression unaryOp
+  | BinExpr of bin_expr
+  | UnaryExpr of unary_expr
   | Call of string * expression list
   | MemberCall of expression * string * expression list
   | Var of string
-  | Literal of baseType
-[@@deriving show { with_path = false }]
+  | Literal of base_type
 
-type t = Program of statement list [@@deriving show { with_path = false }]
+and bin_expr =
+  | Add of expression * expression
+  | Sub of expression * expression
+  | Mul of expression * expression
+  | Div of expression * expression
+  | Mod of expression * expression
+  | Exp of expression * expression
+  | Eq of expression * expression
+  | Neq of expression * expression
+  | Lt of expression * expression
+  | Le of expression * expression
+  | Gt of expression * expression
+  | Ge of expression * expression
+  | And of expression * expression
+  | Or of expression * expression
+
+and unary_expr = Neg of expression | Not of expression
+
+and base_type =
+  | Int of int
+  | Bool of bool
+  | Float of float
+  | String of string
+  | Char of char
+  | List of expression list
+  | Tuple of expression list
+  | Unit
+[@@deriving show { with_path = false }]
