@@ -1,4 +1,3 @@
-open Lexing
 module E = MenhirLib.ErrorReports
 module L = MenhirLib.LexerUtil
 module I = ErrorParser.MenhirInterpreter
@@ -8,13 +7,13 @@ let fast_parse text =
   let lexbuf = Lexing.from_string text in
   match Parser.program Lexer.read lexbuf with
   | v -> Ok v
-  | exception Lexer.LexicalError msg -> Error (Lexer.LexicalError msg)
+  | exception Lexer.Lexical_error msg -> Error (Lexer.Lexical_error msg)
   | exception Parser.Error -> Error Parser.Error
 
 (* ------------------------------------------------------------------------- *)
 
 (* The type of the exceptions that may be raised by the table-based parser. *)
-exception SyntaxError of ((int * int) option * string)
+exception Syntax_error of ((int * int) option * string)
 
 (** [env checkpoint] extracts a parser environment out of a checkpoint,
    which must be of the form [HandlingError env]. **)
@@ -68,7 +67,7 @@ let error_parse filename text =
 let parse filename text =
   match fast_parse text with
   | Ok ast -> ast
-  | Error (Lexer.LexicalError _ as err) -> raise err
+  | Error (Lexer.Lexical_error _ as err) -> raise err
   | Error _ -> error_parse filename text
 
 let run ?filename () =

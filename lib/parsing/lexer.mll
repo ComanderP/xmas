@@ -1,7 +1,7 @@
 {
   open Parser
 
-  exception LexicalError of string
+  exception Lexical_error of string
 
   let string_of_pos (p : Lexing.position) : string =
     Printf.sprintf "line %d, characters %d-%d"
@@ -101,7 +101,7 @@ rule read = parse
   | _ as c { 
       let pos = Lexing.lexeme_start_p lexbuf in
       let msg = Printf.sprintf "Unexpected character %c at %s" c (string_of_pos pos) in
-      raise (LexicalError msg) 
+      raise (Lexical_error msg) 
     }
   (* End of file *)
   | eof { EOF }
@@ -118,7 +118,7 @@ and string = parse
   | _ as c { 
     Buffer.add_char string_buff c;
     string lexbuf }
-  | eof { raise (LexicalError "Unterminated string. Expected '\"'") }
+  | eof { raise (Lexical_error "Unterminated string. Expected '\"'") }
 and string2 = parse
   | '\'' {
     let str = Buffer.contents string_buff in
@@ -132,4 +132,4 @@ and string2 = parse
   | _ as c { 
     Buffer.add_char string_buff c;
     string2 lexbuf }
-  | eof { raise (LexicalError "Unterminated string. Expected \"'\"") }
+  | eof { raise (Lexical_error "Unterminated string. Expected \"'\"") }

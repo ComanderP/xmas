@@ -6,7 +6,7 @@ let ast = Alcotest.testable Ast.pp ( = )
 let parse (s : string) : Ast.t =
   let lexbuf = Lexing.from_string s in
   let ast = Parser.program Lexer.read lexbuf in
-  ast
+  AstWithPos.strip ast
 
 let test_parse fix () =
   let res = parse (fst fix) in
