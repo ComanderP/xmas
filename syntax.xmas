@@ -62,6 +62,10 @@ fib \ n -> fib(n-1) + fib(n-2)
 // function definition
 identifier \ expression expression -> expression
 
+f \x y -> {}.(x+y)
+
+
+
 if a == 1 {
 
 }
