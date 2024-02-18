@@ -1,7 +1,3 @@
-a, b, str = input().int().float()
-
-#before (a + b) {print(a)}
-
 circle \r -> {
     r@radius
 }
@@ -31,8 +27,9 @@ point \x y -> {
 }
 
 translate::point \x y -> {
-    .x + x@x
-    .y + y@y
+    (.x + x)@x
+    (.y + y)@y 
+
 }  
 
 
@@ -64,8 +61,6 @@ identifier \ expression expression -> expression
 
 f \x y -> {}.(x+y)
 
-
-
 if a == 1 {
 
 }
@@ -76,7 +71,7 @@ match a {
     \ _ ->
         { 
             print("idk what happened")
-            "idk"
+            return "idk"
         }
 }
 
@@ -85,4 +80,105 @@ match a == b {
     \ False -> { print("Different") }
 }
 
+# member access 
+expression.expression 
 
+# member function 
+(expression.expression) ( ... )
+
+expression ( ... ) 
+
+(a)(b)
+a(b)(c)
+
+update_name \ person new_name -> {
+    person.name = new_name 
+}.person
+
+
+map \ list fn -> {
+    
+}
+a = \n -> n + 1
+
+map([1, 2, 3], a)
+
+
+person \ name age -> {
+    name = name 
+    age = age
+}
+
+_dot \ arr index -> arr[index]
+
+tree \ left right key value -> {
+
+    left = left 
+    right = right 
+    k = key 
+    v = value 
+
+    get_value \ key -> {
+        ret = -1
+        if (tree.k == key) {
+            ret = tree.v
+        } else { 
+            
+        }
+    }
+
+} 
+
+list = [1, 2, 3]
+
+// quick-scope
+print(list.{
+    sum = 0
+    for i in range(len) {
+        sum += [i]
+    }
+}.sum)
+
+// parsing input 
+a_int, b_bool, c_string = input.parse(int, bool, string)
+
+// 
+read_line()
+
+
+input = {
+    line = ""
+    line_pos = 0
+
+    int \ -> {
+        result = 0
+        is_positive = 1
+        if line.[line_pos] == '-' {
+            is_positive = -1
+            line_pos = line_pos + 1
+        }
+
+        while (['0', '1', '2', '3', '4', '5'].contains(line.[line_pos])) {
+            result = result * 10
+            result += char.ord(line.[line_pos]) - char.ord('0')
+            line_pos = line_pos + 1
+        }
+    }.(result * is_positive)
+
+    parse \ ..funs -> { 
+        line = read_line()
+        ret = ()
+        for f in funs {
+            ret = ret:f()
+        }
+    }.ret 
+}
+
+
+
+Future Features: 
+- tuple deconstruction 
+a, b = (1, 2)
+
+- whatever this is 
+#before (a+b) print(a)
